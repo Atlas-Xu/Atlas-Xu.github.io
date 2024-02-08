@@ -44,6 +44,8 @@ jobs:
           node-version: "18"
       - name: Install Dependencies
         run: npm install
+        run: npm install hexo-theme-next
+        run: npm install hexo-word-counter
       - name: Build with Hexo
         run: npx hexo g
       - name: Upload artifact

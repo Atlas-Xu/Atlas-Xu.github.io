@@ -51,9 +51,9 @@ darkmode: false
 # ---------------------------------------------------------------
 
 favicon:
-  small: /images/favicon-16x16-next.png
-  medium: /images/favicon-32x32-next.png
-  apple_touch_icon: /images/apple-touch-icon-next.png
+  small: /images/favicon-16x16.png
+  medium: /images/favicon-32x32.png
+  apple_touch_icon: /images/apple-touch-icon.png
   safari_pinned_tab: /images/safari-pinned-tab.svg
   #android_manifest: /manifest.json
 
@@ -142,7 +142,7 @@ sidebar:
 # Sidebar Avatar
 avatar:
   # Replace the default image and set the url here.
-  url: /images/avatar.gif
+  url: /uploads/avatar.png
   # If true, the avatar will be displayed in circle.
   rounded: false
   # If true, the avatar will be rotated with the cursor.
@@ -209,6 +209,7 @@ footer:
 
   # Icon between year and copyright info.
   icon:
+    enable: false
     # Icon name in Font Awesome. See: https://fontawesome.com/icons
     name: fa fa-heart
     # If you want to animate the icon, set it to true.
@@ -218,7 +219,7 @@ footer:
 
   # If not defined, `author` from Hexo `_config.yml` will be used.
   # Set to `false` to disable the copyright statement.
-  copyright:
+  copyright: 本站点采用知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议
 
   # Powered by Hexo & NexT
   powered: true

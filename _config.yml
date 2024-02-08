@@ -13,12 +13,16 @@ timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://xuchang.dev
-permalink: :year/:month/:day/:title/
+url: https://www.xuchang.dev
+#permalink: :year/:month/:day/:title/
+permalink: post/:abbrlink.html
+abbrlink:
+  alg: crc32
+  rep: hex
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
-  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+  trailing_html: false # Set to false to remove trailing '.html' from permalinks
 
 # Directory
 source_dir: source
@@ -101,5 +105,6 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: 
-  repo: 
+  type: git
+  repo: https://github.com/Atlas-Xu/Atlas-Xu.github.io.git
+  branch: main

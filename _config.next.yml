@@ -179,6 +179,7 @@ links_settings:
 
 links:
   #Title: https://example.com
+  Bright Games: https://brightgames.top/
 
 # Table of Contents in the Sidebar
 # Front-matter variable (nonsupport wrap expand_all).
@@ -241,6 +242,7 @@ footer:
 
 # Use `description` in front-matter to specify post excerpt.
 excerpt_description: true
+
 
 # Read more button
 # If true, the read more button will be displayed in excerpt section.

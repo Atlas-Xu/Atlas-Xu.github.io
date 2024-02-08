@@ -105,6 +105,5 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: git
-  repo: https://github.com/Atlas-Xu/Atlas-Xu.github.io.git
-  branch: main
+  type: 
+  repo: 

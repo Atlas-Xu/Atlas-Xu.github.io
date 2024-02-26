@@ -1,4 +1,12 @@
+---
+title: Linux学习笔记
+tags:
+  - Linux
+abbrlink: b30ceb9f
+date: 2024-02-27 00:34:00
+---
 最近在速通RHCE，也是顺便补一下Linux基础了，简单记录一下，有缘搭GitBook。
+<!-- more -->
 # Vim
 ## Basic
 

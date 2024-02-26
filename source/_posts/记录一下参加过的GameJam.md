@@ -46,10 +46,14 @@ date: 2024-02-21 00:19:00
 从控制台的风格我们联想到了以前一款在ggj开发出来的知名游戏hacknet，这款游戏也是控制台风格，但是更偏向于一款“好玩的金山打字王”，我们不希望和别的游戏有重合。这时头脑风暴的时候想起来了CTF。
 我稍微接触过CTF比赛（虽然真的很菜），于是提出把游戏做成类似CTF比赛的解谜游戏，CTF也是在各种线索中求得答案，加上CTF中一部分的题目的解题方式比较符合BrightFan想要的控制台风格，于是就在做过的题目中选择了几题，然后将难的部分略去细节，多环节的题目进行拆分，虽然最后测试还是发现游戏难度有点大了。最后为了贴合这个题目，给了个比较符合场景的设定，但是由于时间限制，在游戏里只体现了一部分。
 
+## 游戏玩法介绍
+我配的讲解，总觉得很怪
+<iframe src="//player.bilibili.com/player.html?aid=89193578&bvid=BV187411J7XT&cid=152345198&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
 ## another
-**[BrightFan的记录]**(https://brightgames.top/admin/240)
-**[游戏玩法介绍]**(https://www.bilibili.com/video/av89193578)（逃：我配的讲解，总感觉有点怪
-**[本期主题视频]**(https://www.bilibili.com/video/av85637752?p=2)
+**![BrightFan的记录]**(https://brightgames.top/admin/240)
+**![本期主题视频]**(https://www.bilibili.com/video/av85637752?p=2)
+
 
 # 2020 CIGA Game Jam 作品《angry ant》
 上周末参加了CIGA Game Jam 2020，参与负责了部分程序和部分策划，最后在讨论中做完了一个桌面清理解压小游戏，这次也做了一个大胆的尝试，不用代码写完游戏。最后也是成功了，用了Unity的Bolt插件——很好上手的一款的插件，能帮初学的人快速做出效果，而制作的本身只要掌握事物逻辑和Unity的基础内容，但是体验嘛有点一言难尽，开始觉得方便，但是在后面发现一些简单的操作需要扯的复杂，还有就是对应的重载的函数不够，相当简单的三个值取并集的操作，因为或运算只给了两值或的基础运算，自己就需要再扯多一个，然后有种扯毛衣越扯越乱的感觉。还是蛮推荐新手使用该插件并通过官方的教程理顺逻辑和Unity的基础内容。

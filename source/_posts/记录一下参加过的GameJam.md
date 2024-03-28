@@ -9,7 +9,6 @@ date: 2024-02-21 00:19:00
 还是要记录一下参加的GameJam的作品
 <!-- more -->
 # 2019 CIGA Game Jam 作品《需要一个★》
-**[BrightFan的记录](https://brightgames.top/admin/152)**
 由于暑假没回家，就把两位朋友薅过来广州一起参加广州站的CIGA Game Jam，这也是唯一一次参加过的线下Game Jam。
 毫无Unity开发经验的我，主打一个现学现卖。
 ## 主题发布
@@ -51,8 +50,7 @@ date: 2024-02-21 00:19:00
 <iframe src="//player.bilibili.com/player.html?aid=89193578&bvid=BV187411J7XT&cid=152345198&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 ## another
-**![BrightFan的记录]**(https://brightgames.top/admin/240)
-**![本期主题视频]**(https://www.bilibili.com/video/av85637752?p=2)
+**[本期主题视频]**(https://www.bilibili.com/video/av85637752?p=2)
 
 
 # 2020 CIGA Game Jam 作品《angry ant》

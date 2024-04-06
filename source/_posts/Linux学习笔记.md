@@ -7,6 +7,8 @@ date: 2024-02-27 00:34:00
 ---
 最近在速通RHCE，也是顺便补一下Linux基础了，简单记录一下，有缘搭GitBook。
 <!-- more -->
+# Tools
+- [tldr](https://tldr.inbrowser.app/)
 # Vim
 ## Basic
 

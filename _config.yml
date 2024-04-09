@@ -107,3 +107,7 @@ theme: fluid
 deploy:
   type: 
   repo: 
+
+# encrypt
+encrypt:
+  enable: true

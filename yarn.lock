@@ -587,6 +587,11 @@
     "hexo-front-matter" "^1.0.0"
     "hexo-fs" "^3.1.0"
 
+"hexo-blog-encrypt@^3.1.9":
+  "integrity" "sha512-dzuZiW5mD8t1FOhJXqc+IgV1Tc45YtatJb/w8k4PyT9McQxsROQXsBw+zbDembzuqMnbnkCeT2SapZ/r9AgAcw=="
+  "resolved" "https://registry.npmjs.org/hexo-blog-encrypt/-/hexo-blog-encrypt-3.1.9.tgz"
+  "version" "3.1.9"
+
 "hexo-cli@^4.3.0":
   "integrity" "sha512-nYe7yJhXT7MwlDEpIAjneMfz0wnWTdIhRv+cVW2OPTw8JtG2X+8Y/sYhPDvQz/ZqjFRZ4qgiKFXN5orFJ/u1vg=="
   "resolved" "https://registry.npmjs.org/hexo-cli/-/hexo-cli-4.3.1.tgz"

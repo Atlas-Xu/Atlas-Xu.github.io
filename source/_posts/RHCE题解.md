@@ -19,6 +19,7 @@ message: 仅供个人考试使用
 1. 现场如果显示器能够排列下足够窗口则单独打开terminal
 2. 现场如果显示器分辨率太低可以使用`vim -O file1 file2 `
 ## VIM
+*这部分务必背下来*
 编辑vim配置文件`vim ~/.vimrc`，配置tab缩进等
 ```shell
 set nu
@@ -161,6 +162,8 @@ ansible-galaxy collection install http://content/community-general-8.2.0.tar.gz 
 ansible-galaxy collection install http://content/redhat-rhel_system_roles-1.16.2.tar.gz -p mycollections/
 ```
 2. 验证：`ansible-galaxy collection list`
+## tips
+本题一定要验证，和下面题目有极大关联，如果这里面的collection调用不了或者找不到安装，大概率是第一天的cfg中collections目录配置错误
 # 4 安装软件包
 - [ ] 创建一个名为 `/home/devops/ansible/packages.yml` 的 playbook 要求如下：
 	- [ ] 将 php 和 mariadb 软件包安装到 dev、test 和 prod 组中的主机上
@@ -366,8 +369,8 @@ ansible-galaxy collection install http://content/redhat-rhel_system_roles-1.16.2
 ## balance主机组陷阱
 balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以访问浏览器看不到任何页面，此时需要进入到 balancer 角色中手动添加 firewalld 模块来放行 http 流量。检查步骤如下：
 1. 查看balancers下主机的名称：`ansible-inventory --g`
-2. 检查balancers：`ansible balancers -a "systemctl status firewalld"`
-3. 检查webservers：`ansible webservers -a "systemctl status firewalld"`
+2. 检查balancers：`ansible balancers -a "systemctl status firewalld"`，没开则无问题
+3. 检查webservers：`ansible webservers -a "systemctl status firewalld"`，若开启且没放行80，则需要进入`roles/balancer/task`更改剧本
 4. 开启防火墙，可以在roles.yml中增加task，为balancers和webservers全部开启
 
 
@@ -381,7 +384,22 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 	- [ ] 如果设备 vdb 不存在，应显示错误信息：Disk does not exist
 
 ## answer
-创建分区在parted找，打印报错在debug找，格式化在filesystem找，创建挂载点在file模块，挂载在mount模块
+### 收集环境
+每个人环境可能不同，因此需要提前规划且知道在各个设备上可能出现的结果
+1. `ansible all -a lsblk`，可以查看所有主机的磁盘情况
+2. 根据显示结果可以得知，会在servera、serverb上创建800M，serverc上创建1.5G，workstation会报两个错
+### 编写剧本
+创建分区在parted找，找到带有`part_end`，打印报错在debug找，格式化在filesystem找，创建挂载点在file模块，挂载在mount模块
+#### 思路
+1. tasks中，写好block、rescue、always部分。block是尝试做的部分，rescue是在block出错后做的部分，always是必须执行的部分
+2. 因此先在block中写好创建1.5G的内容，这部分在`parted`模块中找有`part_end`的部分
+3. 若无法创建则会报错，因此在rescue中创建报错，`debug`模块；且1500创建不了需要创建800，因此也是写在rescue中，将block中的创建1500复制到下面改为800
+4. 有盘后需要格式化为ext，因此放在always模块下，在`filesystem`模块下查找；格式化后则进行挂载，需要先创建挂载目录，在`file`模块中找，然后才能挂载，用`mount`模块
+5. 最后如果不存在则报错打印信息，复用前面的debug；由于是不存在的时候报错，因此需要补充条件判断语句。
+	1. 根据事实变量找到vdb → `ansible_devices.vdb` → ` when: ansible_devices.vdb is not defined`
+	2. 补充其他的条件判断
+#### 剧本
+以下是在所有主机组上运行的剧本，如果只是balance主机组，则rescue中创建800M的部分不需要条件判断，建议都加上，平时练习以all来练习
 ```yaml
 ---
 - name: create and use partition
@@ -405,7 +423,11 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
             number: 1
             state: present
             part_end: 800MiB
+          # 如果考试有盘小于800，则不用下面这条when
           when: ansible_devices.vdb is defined
+          # 改为下条
+          ignore_errors: yes
+          
       always:
         - name: format fs
           community.general.filesystem:
@@ -433,6 +455,9 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
       when: ansible_devices.vdb is not defined
 ```
 
+### 验证
+1. 验证分区：`ansible all -a lsblk`
+2. 验证永久挂载：`ansible all -a "tail -1 /etc/fstab"`
 # 9 创建和使用逻辑卷(B)
 - [ ] 创建一个名为 `/home/devops/ansible/lvm.yml` 的 playbook，在所有节点运行要求如下：
 	- [ ] 在 research 卷组中，创建 1500M 的逻辑卷 data
@@ -441,13 +466,61 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 	- [ ] 如果卷组 research 不存在，则报错如下信息：`Volume group does not exist`
 	- [ ] 不要以任何方式挂载逻辑卷
 ## answer
-创建逻辑卷在lvol
+### 练习时
+因为做了9A，因此执行：`bash init-vdb-status.sh`和`bash deploy-vg.sh`，清空上一题剧本运行后的结果，考试时，AB仅会抽一题，一般抽A
+
+### 思路
+1. 收集信息，因为是创建vg，因此使用`ansible all -a vgs`查看所有卷组信息，根据所得信息可以得出：servera、b、d会报错并创建800M的卷组，serverc会直接创建1500M，workstation会报两个错无法创建
+2. 本题直接要求在所有主机组上运行，因此hosts要写all，tasks中，写好block、rescue、always部分。block是尝试做的部分，rescue是在block出错后做的部分，always是必须执行的部分
+3. 首先是创建逻辑卷，模块是`lvol`，如果不记得可以`ansible-doc -l | grep -i lvm`，第一个示例就是对的，同理写在block中
+4. 如果无法创建1500就报错，报错后需要再尝试创建800M的vg，这部分则需要在rescue中
+5. 格式化逻辑卷，搜索`filesystem`模块，写在always中。此时的dev需要填写逻辑卷的路径→`/dev/research/data`即`/etc/vg/lv`
+6. 最后卷组不存在报错，也是debug模块，需要在always中，同时要考虑条件判断，条件判断时，通过事实变量找到→`ansible_lvm.vgs.research`
+7. 严谨些需要将前面的判断条件补充，如果在创建800M时也是空间不够，同样写`ignore_errors: yes`
+### 剧本
+```yaml
+---
+- name: create lv
+  hosts: all
+  tasks:
+    - block:
+        - name: Create 1500M lv
+          community.general.lvol:
+            vg: research
+            lv: data
+            size: 1500
+      rescue:
+        - name: print error messages
+          ansible.builtin.debug:
+            msg: "Could not create logical volume of that size"
+
+        - name: Create 800M lv
+          community.general.lvol:
+            vg: research
+            lv: data
+            size: 800
+          ignore_errors: yes
+      always:
+        - name: format ext4 fs
+          community.general.filesystem:
+            fstype: ext4
+            dev: /dev/research/data
+          when: ansible_lvm.vgs.research is defined
+
+        - name: print messages
+          ansible.builtin.debug:
+            msg: "Volume group does not exist"
+          when: ansible_lvm.vgs.research is not defined
+```
+
+### 验证
+
 
 # 10 生成主机文件
 - [ ] 将初始模板文件从 http://content/hosts.j2 下载到 `/home/devops/ansible` 目录中
 - [ ] 完善该模板，用以生成受管节点的 `/etc/myhosts` 文件
 - [ ] 创建名为`/home/devops/ansible/hosts.yml `的 playbook，对 dev 主机组使用此模板
-- [ ] 该剧本运行后，dev 主机组中的 /etc/myhosts 内容最终如下：
+- [ ] 该剧本运行后，dev 主机组中的 `/etc/myhosts` 内容最终如下：
 ```shell
 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1 localhost localhost.localdomain localhost6 localhost6.localdomain6
@@ -460,6 +533,49 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 
 ## answer
 该题也有陷阱，需要所有主机先运行
+1. 下载文件，wget
+2. 下面内容的组成是由主机的事实变量组成，分别是`ansible_default_ipv4.address`、`ansible_fqdn` 、`ansible_hostname`
+3. 涉及多个节点，因此需要编写for循环，循环中需要通过魔法变量`groups`来获取所有主机名字；下面需要调用各个主机组的事实变量则需要通过环境变量`hostvars`
+### `hosts.j2`修改后
+注意这个文件写的时候的空格，此处练习时常出错
+```j2
+
+{%  for i in groups.all  %}
+{{  hostvars[i].ansible_default_ipv4.address  }} {{  hostvars[i].ansible_fqdn  }} {{  hostvars[i].ansible_hostname  }}
+{%  endfor  %}
+```
+### playbook
+查询template模块，且所有主机先运行才能收集到所有的事实变量
+或者用when（如果要求一个剧集内完成）
+
+#### 两个剧集的写法
+```yaml
+---
+- name: get all facts
+  hosts: all
+
+- name: Generate /etc/myhosts
+  hosts: dev
+  tasks:
+    - name: use template
+      ansible.builtin.template:
+        src: hosts.j2
+        dest: /etc/myhosts
+```
+
+#### 一个剧集的写法
+```yaml
+---
+- name: Generate /etc/myhosts
+  hosts: all
+  tasks:
+    - name: use template
+      ansible.builtin.template:
+        src: hosts.j2
+        dest: /etc/myhosts
+      when: inventory_hostname in groups.dev
+```
+
 # 11 修改文件内容
 - [ ] 创建一个名为 `/home/devops/ansible/issue.yml` 的 playbook，要求如下：
 	- [ ] 剧本将在所有受管节点上运行
@@ -468,7 +584,9 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 		- [ ] 在 test 主机组上，这行文本显示为：Test
 		- [ ] 在 prod 主机组上，这行文本显示为：Production
 ## answer
-查询copy模块，找到content关键词，复制那一项，修改后如下：
+*tip*: 只能写一个剧集且hosts为all，否则没分
+*验证*：`ansible all -a "cat /etc/issue"`
+查询`copy`模块，找到`content`关键词，复制那一项，修改后如下：
 ```yaml
 ---
 - name: modify file content
@@ -607,7 +725,7 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 	- [ ] 运行时间为：每间隔2分钟
 	- [ ] 运行命令：logger "EX294 in progress"
 ## answer
-
+模块为`cron`
 陷阱：crontab不一定在运行，因此playbook需要先确保服务在运行且自启动
 ```yaml
 ---
@@ -620,18 +738,38 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 		  minute: "*/2"
 		  user: devops
 		  job: 'logger "EX294 in progress"'
-	- name: Start service httpd, if not started
+	- name: Start service crond, if not started
 	  ansible.builtin.service:
 		name: crond
 		state: started
 		enabled: yes
 ```
 
-验证：`ansible dev -a "crontab -u devops -l"`
+验证计划任务配置：`ansible dev -a "crontab -u devops -l"`
+验证计划任务运行：`ansible dev -a "systemctl status crond"
 # 18 配置内核参数
 - [ ] 创建一个名为` /home/devops/ansible/sysctl.yml` 的 playbook，在所有受管节点上运行并满足以下要求：
 	- [ ] 在总内存大于 1.5G 的机器上配置虚拟内存参数 swappiness 的值为10
 	- [ ] 在总内存小于 1G 的机器上打印报错：Server memory less than 1024MB
 
 ## answer
-在sysctl模块中找
+在`sysctl`模块中找
+算1.5 * 1024：`echo 1.5*1024 | bc`
+```yaml
+---
+- name: 配置内核参数
+  hosts: all
+  tasks:
+    - name: 在内存大于 1.5G 的主机上设置 swappiness 参数为 10
+      ansible.posix.sysctl:
+        name: vm.swappiness
+        value: "10"
+        state: present
+        reload: yes
+      when: ansible_memtotal_mb > 1536
+
+    - name: 打印报错信息
+      ansible.builtin.debug:
+        msg: Server memory less than 1024MB. RAM size = {{  ansible_memtotal_mb  }}
+      when: ansible_memtotal_mb < 1024
+```

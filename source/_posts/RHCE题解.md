@@ -623,7 +623,9 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 ## answer
 本体陷阱：需要配置SELinux
 1. 创建后使用先使用apache这一角色
-2. ansible-doc file中找EXAMPLE→dire，使用该模板
+2. 创建目录使用file模块，example中搜dire；由于所属组原本没有，则需要在创建文件前增加创建组的模块（在group中搜索）
+3. 软链接在`file`模块中搜索`link`，注意源是自己创建的`/webdev`
+4. 把某个内容复制到文件在copy模块中，最后要设置selinux，使用`setype`字段
 ```yaml
 ---
 - name: create and manage website
@@ -641,7 +643,7 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
         path: /webdev 
         state: directory
         group: webdev
-        mode: '2755'
+        mode: '2775'
     - name: Create a symbolic link
       ansible.builtin.file:
         src: /webdev 
@@ -663,10 +665,50 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 	- [ ] 磁盘设备 vda 的大小
 	- [ ] 磁盘设备 vdb 的大小
 - [ ] 输出文件中的每一行含有一个 key=value
-- [ ] 剧本应当能从 http://content/hwreport.empty 下载该文件并保存到 `/root/hwreport.txt`
+- [ ] 剧本应当能从 http://materials/hwreport.empty 下载该文件并保存到 `/root/hwreport.txt`
 - [ ] 如果硬件项不存在，相关的值设置为 NONE
 ## answer
-下载是`get_url`模块，编辑文件内的行是`lineinfile`模块
+### 思路
+1. 首先通过浏览器访问，查看文件所给的内容，可以看到需要展示的硬件中，有一台机器没有vdb，因此根据题给条件，需要展示为none，可见playbook最后的写法（默认为none）
+2. 下载是`get_url`模块，如果找不到可以 `ansible-doc -l | grep url`，首先创建下载的任务
+3. 文件在所有守管节点下载后，需要修改的是右侧一列的值，因为只修改文件内的行，所以使用`lineinfile`模块，第一个样例即可使用，正则一栏将中间文字替换即可，前后的通配符不用修改，即`'^ ='`
+4. 写完第一个即可复制简单修改，line那一栏涉及事实变量
+### playbook
+```yaml
+---
+- name: hw report 
+  hosts: all
+  tasks:
+    - name: 下载文件
+      get_url:
+        url: http://materials/hwreport.empty
+        dest: /root/hwreport.txt
+    - name: 配置 HOST
+      lineinfile:
+        path: /root/hwreport.txt
+        regexp: '^HOST='
+        line: HOST={{  inventory_hostname  }}
+    - name: 配置 MEMORY
+      lineinfile:
+        path: /root/hwreport.txt
+        regexp: '^MEMORY='
+        line: MEMORY={{  ansible_memtotal_mb  }}
+    - name: 配置 BIOS
+      lineinfile:
+        path: /root/hwreport.txt
+        regexp: '^BIOS='
+        line: BIOS={{  ansible_bios_version  }}
+    - name: 配置 vda size
+      lineinfile:
+        path: /root/hwreport.txt
+        regexp: '^DISK_SIZE_VDA='
+        line: DISK_SIZE_VDA={{  ansible_devices.vda.size  }}
+    - name: 配置 vdb size
+      lineinfile:
+        path: /root/hwreport.txt
+        regexp: '^DISK_SIZE_VDB='
+        line: DISK_SIZE_VDB={{  ansible_devices.vdb.size | default("NONE")  }}
+```
 
 # 14 创建密码库
 - [ ] 创建一个 Ansible 密码库，用来存储用户密码
@@ -704,11 +746,60 @@ balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以�
 - [ ] 用户密码采用 SHA512 哈希格式
 - [ ] 剧本能在本次考试中使用在其他位置创建的库密码文件 `/home/devops/ansible/secret.txt`
 ## answer
-1. 先下载文件，没说在playbook中下载就单独下载
-2. playbook
-```yaml
+算是第二难吧
+### 思路
 
+1. 先下载文件，没说在playbook中下载就单独下载，下载后看到文件要求是创建3个用户
+2. 题给是2大题，做完一题后基本上复制即可，由于涉及不同职位，需要loop循环并用when语句做判断
+3. 用到的密码是上一题创建的，需要引用外部变量
+4. 创建用户使用user模块，其中注意附属组是`groups`，还需要`append: yes`来追加到附属组
+5. 密码变量需要通过管道符加密，不能明文保存(这部分无法找，需背住)
+### playbook
+```yaml
+---
+- name: create developer
+  hosts: dev,test
+  vars_files:
+    - /home/devops/ansible/user_list.yml
+    - /home/devops/ansible/locker.yml
+  tasks:
+    - name: 确保devops组存在
+      ansible.builtin.group:
+        name: devops
+        state: present
+        
+    - name: 创建用户
+      ansible.builtin.user:
+        name: "{{  item.name  }}"
+        groups: devops
+        append: yes
+        password: "{{  pw_developer | password_hash('sha512')  }}"
+      loop: "{{  users  }}"
+      when: item.job == "developer"
+
+# 将上面全部复制，修改即可
+- name: create manager
+  hosts: prod
+  vars_files:
+    - /home/devops/ansible/user_list.yml
+    - /home/devops/ansible/locker.yml
+  tasks:
+    - name: create group opsmgr
+      ansible.builtin.group:
+        name: opsmgr
+        state: present
+    - name: create user
+      ansible.builtin.user:
+        name: "{{  item.name  }}"
+        groups: opsmgr
+        append: yes
+        password: "{{  pw_manager | password_hash('sha512')  }}"
+      loop: "{{  users  }}"
+      when: item.job == "manager"
 ```
+### 验证
+由于密钥文件被加密了，因此执行时需要增加密码参数
+`ansible-playbook users.yml --vault-id=secret.txt`
 # 16 更新 Ansible 库的密钥
 - [ ] 按照下方描述，更新现有库的密钥：
 	- [ ] 从 http://content/salaries.yml 下载库到 /home/devops/ansible

@@ -1,7 +1,7 @@
 ---
 title: RHCSA题解
 tags: Linux
-description: RHCSA做题的笔记
+description: 原本地Obsidian记录的RHCSA做题的笔记
 password: RHCSA exam
 message: 仅供个人考试使用
 abbrlink: 52c231e4

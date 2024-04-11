@@ -1,7 +1,7 @@
 ---
 title: RHCE题解
 tags: Linux
-description: RHCE做题的笔记
+description: 原本地Obsidian记录的RHCE做题的笔记
 abbrlink: c030165f
 date: 2024-04-10 00:09:26
 password: RHCE exam

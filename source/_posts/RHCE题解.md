@@ -15,17 +15,24 @@ message: 仅供个人考试使用
 - playbook的开头三个横必须写：`---`
 - 前3题是基础，没做出来后面都无法进行，整体还是需要按顺序做，前后均有一定关联性
 - yaml文件注意空格
+- 考试小心坑：`yes|no`=true|false = on|off，与`'yes'`不同，`number: 012345`是八进制的表示，数字需要表达原有意思需要`''`，只要不是0开头可以直接数字表示
+- hlsearch、incsearch、ignorecase、smartcase
 ## 分屏技巧
 1. 现场如果显示器能够排列下足够窗口则单独打开terminal
 2. 现场如果显示器分辨率太低可以使用`vim -O file1 file2 `
+3. perfix：Ctrl-w；action：hjkl（switch）；split：`_v_ertical,_s_plit `
+4. `.`重复上一次操作
 ## VIM
-*这部分务必背下来*
+*这部分务必背下来（其实vim help就可以查，其实直接设置filetype即可*
+help filetype，help autocmd
 编辑vim配置文件`vim ~/.vimrc`，配置tab缩进等
 ```shell
 set nu
+# 
 autocmd FileType yaml setlocal ai ts=2 sts=2 sw=2 et
 set cuc #列光标定位
 ```
+autocmd是编辑事件的过程触发
 # 1 安装和配置 Ansible
 按照下方所述，在控制节点上安装并配置 ansible：
 - [ ] 安装所需的软件包
@@ -98,8 +105,49 @@ mkdir mycollections
 	4. 查看实际执行是否提权为root：`ansible all -a id`
 
 ## 如果需要配置密码的情况
+1. 验证该账户到受管节点是否需要密码登录
+	1. ssh连接
+	2. sudo
+2. 假设给的账户如student需要密码登录，且密码可以正常登录和用于sudo提权，cfg中修改简单配置，sudo密码设置在inventory文件，其实就是密钥和配密码的区别
+```shell
+vim ansilbe.cfg
+	[defaults]
+	inventory=/home/devops/ansible/inventory
+	remote_user=student
+	roles_path=/home/devops/ansible/roles
+	collections_path=/home/devops/ansible/mycollections
+	host_key_checking=False
+	
+	[privilege_escalation]
+	become=True
+	become_ask_pass=False
+	become_method=sudo
+	become_user=root
 
+```
 
+```shell
+vim invetory
+	[dev]
+	servera
+	
+	[test]
+	serverb
+	
+	[prod]
+	serverc
+	serverd
+	
+	[balancers]
+	workstation
+	
+	[webservers:children]
+	prod
+
+	[all:vars]
+	ansible_password=student
+	ansible_become_password=student
+```
 # 2 配置您的系统以使用默认存储库
 作为系统管理员，您需要在受管节点上安装软件：
 - [ ] 创建一个名为` /home/devops/ansible/yum_repo.yml` 的剧本，在各个受管节点上安装以下存储库：
@@ -122,6 +170,7 @@ mkdir mycollections
 1. 查找ansible doc中的项目：`ansible-doc -l | grep yum`
 2. 查看yum对应的文档：`ansible-doc yum_repository`
 3. 根据文档中EXAMPLE的例子补足即可；其中配置完第一个后，由于第二个基本上相同，`shift+v`全选后`y`粘贴修改即可
+4. 测试发现同一个task中参数的顺序也有影响
 ```yml
 ---
 - name: configure dnf repository
@@ -369,8 +418,8 @@ ansible-galaxy collection install http://content/redhat-rhel_system_roles-1.16.2
 ## balance主机组陷阱
 balancers 主机组的 firewalld 可能处于开启状态（陷阱），所以访问浏览器看不到任何页面，此时需要进入到 balancer 角色中手动添加 firewalld 模块来放行 http 流量。检查步骤如下：
 1. 查看balancers下主机的名称：`ansible-inventory --g`
-2. 检查balancers：`ansible balancers -a "systemctl status firewalld"`，没开则无问题
-3. 检查webservers：`ansible webservers -a "systemctl status firewalld"`，若开启且没放行80，则需要进入`roles/balancer/task`更改剧本
+2. 检查balancers：`ansible balancers -a "systemctl status firewalld"`，*没开*则无问题
+3. 检查webservers：`ansible webservers -a "systemctl status firewalld"`，*若开启且没放行80，则需要进入`roles/balancer/task`更改剧本* 
 4. 开启防火墙，可以在roles.yml中增加task，为balancers和webservers全部开启
 
 

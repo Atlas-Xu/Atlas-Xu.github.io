@@ -87,7 +87,7 @@ source /etc/profile.d/bash-completion.sh # 生效 Tab 键补齐
 
 1. 查看状态`systemctl status httpd`
 2. 重新执行查看报错`systemctl restart httpd`
-#### 输出以下报错信息
+	# 输出以下报错信息
 	Job for httpd.service failed because the control process exited with error code.
 	See "systemctl status httpd.service" and "journalctl -xeu httpd.service" for details.
 3. 执行报错提示`journalctl -xeu httpd.service`
@@ -229,7 +229,7 @@ echo 'flectrag' | passwd --stdin manalo
 ## 10 查找文件
 - [ ] 查找用户 `greedy` 的所有文件并将其副本放入 `/root/findfiles` 目录
 ### answer
-1. 创建目录：`mkdir /root/findfiles`
+1. *（注意）* 创建目录：`mkdir /root/findfiles`
 2. 查找greedy：`find / -xdev -user greedy`
 3. 以归档模式复制：
 ```shell
@@ -267,7 +267,7 @@ tar -tvf /root/backup.tar.bz2
 - [ ] 不要修改这个文件内容，构建映像名为 pdf
 ### answer
 1. 正常已配置免密登录`ssh contsvc@localhost`，若需要输入密码则为默认密码`flectrag`
-2. 配置滞留服务：`loginctl enable-linger`
+2. *（注意）* 配置滞留服务：`loginctl enable-linger`
 3. 下载container file：`wget http://content/Containerfile`
 4. 确认容器环境
 ```shell
@@ -293,6 +293,7 @@ blocked = false
 - [ ] 该服务命名为 `container-ascii2pdf`，并在系统重启时自动启动，无需干预
 - [ ] 将服务配置为在启动时将` /opt/file` 挂载到容器中的 `/opt/incoming` 下，`/opt/progress` 挂载到容器中的`/opt/outcoming` 下
 ### answer
+**该用户必须ssh过去**
 1. 创建宿主机目录，并配置目录权限
 ```shell
 # root用户下
@@ -301,8 +302,8 @@ mkdir /opt/progress
 chown contsvc:contsvc /opt/*
 ```
 2. 启动容器（主要:Z，配置SELinux，contsvc用户下）
-`docker run -d --name ascii2pdf -v /opt/file:/opt/incoming:Z -v /opt/progress:/opt/outcoming:Z pdf:latest`
-3. 创建系统服务
+podman run -d --name ascii2pdf -v /opt/file:/opt/incoming:Z -v /opt/progress:/opt/outcoming:Z pdf:latest`
+3. 创建系统服务（*略不熟*）
 ```shell
 mkdir -p ~/.config/systemd/user
 cd $_
@@ -401,7 +402,7 @@ find /usr -type f -size +10k -size -40k -perm -2000 >/root/files
 #!/bin/bash
 find /usr/share -type f -size -1M | xargs -I{} cp -a {} /root/dfiles
 ```
-4. 配置可执行权限：`chmod +x mysearch`;`chmod +x myfile`
+4. *这步别忘* 配置可执行权限：`chmod +x mysearch`;`chmod +x myfile`
 5. 验证查看文件
 
 
@@ -500,7 +501,7 @@ y
 
 #
 partprobe
-lablk
+lsblk
 ```
 2. 格式化文件系统并启用交换分区并写入 fstab
 ```shell
@@ -525,14 +526,13 @@ swapon
 gdisk /dev/vdb
 n
 
-
 +1G
 
 w
 y
 #
 partprobe
-lablk
+lsblk
 
 #加进物理卷
 pvcreate /dev/vdb3

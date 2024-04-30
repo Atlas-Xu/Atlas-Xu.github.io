@@ -2,11 +2,13 @@
 title: CISSP Mindmap Note (In Updating)
 tags:
   - 安全
-description: source：谷安天下。顺带测试一下hexo minmap插件
+description: source：谷安天下。顺带测试一下hexo minmap插件。想5月考完CC就顺便先把CISSP学了（怕不是我太无聊了
 abbrlink: f0102515
 date: 2024-04-25 00:20:00
 ---
-# Domain1 Security and Risk Management（安全与风险管理）
+# CISSP考纲/知识体系
+![CISSP考纲/知识体系](https://data.xchub.cn/CISSP知识体系.png)
+# Domain 1 Security and Risk Management（安全与风险管理）
 {% markmap 2400px %}
 - 信息安全与风险管理基础
     - 信息
@@ -713,7 +715,7 @@ date: 2024-04-25 00:20:00
         - BCP团队
 {% endmarkmap %}
 
-# Domain2 Assest security（资产安全）
+# Domain 2 Assest security（资产安全）
 {% markmap 2400px %}
 - 数据管理
     - 数据管理最佳实践参考
@@ -1136,4 +1138,461 @@ date: 2024-04-25 00:20:00
     - 国际标准组织 ISO
         - ISO27001
         - ISO27002
+{% endmarkmap %}
+
+
+# Domain 7 Security operations（安全运营）
+{% markmap 2400px %}
+- 基础概念
+    - 运行安全
+        - 在集中式和分布式环境中处理信息资产的保护和控制
+        - 运行安全是其他服务的一个品质,并且它本身就是一组服务
+    - 安全运行
+        - 保持安全服务高校可靠运行所要求的日常事务
+    - 业务连续性计划和灾难恢复计划
+    - TOPICS
+    - Objectives
+- 安全运营的基本概念
+    - 关键主题
+        - 维护运营弹性
+            - 关键业务有弹性保持连续性
+                - 制定有应急预案
+                - 实时监控和响应
+        - 保护有价值的资产
+            - 提供各种资产的日本维护
+            - 保护资产不被破坏
+        - 控制系统账号
+            - 维护用户访问关键业务系统的控制
+            - 提供各种帐号(尤其是特权号)的检查和平衡，确保这些帐号成为合理的业务需求
+        - 有效管理安全服务
+            - IT服务的变更、配置和问题管理
+            - 安全相关程序，如用户配资和服务台程序
+            - 关注报告和服务持续改进实践
+    - 运营人员的要求
+        - prudent man 负责、谨慎、明智、有能力的人
+            - 适度谨慎 due care：采取了合理的防范保护措施
+            - 适度勤勉 due deligence：在日常管理中尽到责任
+    - 控制特权账号
+        - 对账号的数量和类型进行严格控制 
+            - using these solutions most efficienctively while also ensuring that privilege accounts are carefully
+        - 小心监控系统的账号管理权限
+            - 服务账号
+            - 执行脚本账号
+        - Identity and access management（IAM）身份和访问管理
+            - the provisioning of users 用户配置（provisioning开通）
+            - managing their access across multiple system 管理跨多系统的访问权限
+            - native access control systems 本地访问控制系统
+        - 知所必须和最小特权（互为补充）
+            - need to know 知所必须
+                - 基于工作或业务需要被授予最小知悉范围和访问权限
+                - 运营安全是关键（常用于军队）
+            - least privilege 最小特权
+                - 要求用户或进程没有不必要的访问特权来执行工作、任务和功能
+                - 目标
+                    - 限制用户和进程只访问必要的资源和工具来完成指定任务
+                - 限制
+                    - 可访问资源
+                    - 用户可以执行的操作
+    - 使用组和角色管理账号
+        - 不同类型的账号
+            - 特权账号
+                - ROOT 或内置管理员账号
+                    - 用于管理设备和系统全能默认账号
+                    - 安全控制
+                        - 更名尽可能严格
+                        - 默认密码要修改
+                        - Logs记录个人使用root账号行为
+                    - 使用root账号远程登录时
+                        - 会话应执行强加密和监控
+                        - 使用多因子的身份验证方法
+                - 服务账户
+                    - 由系统服务和核心应用所使用的特权访问
+                        - 密码复杂并经常更换
+                        - 有一个策略来回收和关闭己遭泄露帐号
+                - 管理员账号
+                    - 这些账号被分配给需要系统特权访问来执行维护任务的指定个人
+                    - 这些账号应与用户的普通账号分开
+                    - 账号密码应安全可靠的分发给个人
+                    - 管理员应书面承认接收账号并遵守组织规则
+                    - 账号不再使用应立即去除
+                    - 所有的活动应该被审计
+                    - 部署额外的日志系统
+                    - 多因素认证
+                - 超级用户
+                    - 这些账号权限由于工作所需授予超过普通用户权限但是不需要管理员权限的
+                    - 超级用户可以在自己的桌面上安装软件
+                    - 应书面承认接收账号并遵守组织规则，如签署安全协议书
+            - 普通或受限用户账户
+                - 使用用户最多
+                - 基于最小权限或知所必须原则
+        - 职责分离
+            - 定义：将一个关键任务分成不同的部分，每个部分由不同的人来执行
+            - 目的
+                - 制约，减少故意破坏的几率
+                - 补充，减少无意的疏漏和错误的几率
+            - 原因
+                - 不同安全相关任务所需技能不同
+                - 将管理员任务分给多个角色以赋予不同的信任级别
+                - 防止安全相关功能委托给一个角色或人员
+            - 系统管理员
+                - 最小特权：根据需要确定必须访问和应用
+                - 监控：行为被日志审计并发送到一个单独的审计系统中
+                - 防止欺诈行为：管理员如果没有勾结他人就没能力参与恶意活动
+                - 背景调查
+                - 岗位轮换
+            - 操作员
+                - 工作职责：进行主机的日常操作，确保预定的工作有效进行和解决可能出现的问题
+                - 权限说明：操作员具有很高的权限，但低于系统管理员，这些权限可以规避系统的安全策略，应监控
+                - 安全控制
+                    - 最小特权
+                    - 监控：操作员的行动被记录并发送车不受操作员控制的一个独立系统中
+                    - 职责分离：管理员如果没有勾结他人就没能力参与恶意活动
+                    - 背调
+            - 安全管理员
+                - 作用：定义系统安全设置并协同管理员进行相关配置，提供一种权利制衡，为系统管理员提供审计和
+                - 主要职责
+                    - 账号管理
+                    - 敏感标签分配
+                    - 系统安全设置
+                    - 审计数据的评审
+            - 帮助/服务台人员
+                - 提供一线支持
+                - 在需要时重置用户密码
+                - 进行监控和背景调查
+            - 普通用户
+                - 需要访问信息技术资源
+        - 监控特权
+            - 许可、适用性和背景调查
+            - 以下情况不应被授予访问权限（如，基于IDS和防火墙日志，应立即阻断某个IP的访问，但没有；调整时钟或删除日志等）
+                - 近期严重缺乏相关的判断力
+                - 有关角色的行为出现重复的高风险模式
+                - 角色的表现与非法活动有关
+            - Account Validation 账户验证
+                - 确定现有不活动账号（如，已离职/离岗人员账户、临时休假人员账户）
+            - Job rotations 岗位轮换
+                - 减少个人之间共谋活动的风险
+            - 双人操作：现场监督
+            - Mandatory vacations 强制休假
+                - 强制员工休假，以便能识别潜在的欺诈行为，并且使工作轮换成为可能
+                - 强制假期具有突然性，使欺诈者没有时间来掩饰欺诈痕迹；欺诈者为了避免他人发现其行为
+        - 安全管理员与网络管理员
+            - 区别
+                - 网络管理员关注可用性及用户需要的功能和效率
+                - 但效率和功能常以牺牲安全为代价，注重安全会降低效率，如采用杀毒软件扫描，部署防火墙
+            - 安全管理员职责
+                - 实现和维护安全设备和软件
+                - 执行安全评估
+                - 创建和维护用户资料、实现和维护访问控制机制
+                - 配置和维护强制性访问控制，环境中的标签
+                - 为用户设置初始口令
+                - 检查审计日志
+    - Accountability 可问责
+        - 用户访问资源的权限必须给子适当控制，以避免授予过多权限导致对公司及其资源造成损害
+        - 应当对用户访问和操作资源的行为进行监控、审计和日志记录。用户ID应包含在日志中
+        - Routine manner 日志应常规记录，并定期分析，可通过自动方式和人工方式相结合的手段，当超过规定门限报警时，管理员给予及时分析处置。
+    - Clipping levels 错误报警门限
+        - 定义：应设定某种错误发生次数的门限，超过此门限后相关行为将受到怀疑或禁止
+        - 作用：设置错误警报门限的目的是使用门限值、监控和审计的方式，及时发现问题防止更大损失发生
+    - 保证级别
+        - 操作保障
+            - 关注产品的体系结构、嵌入的特征和功能。在产品评估中，产品具有使用户持续获得所需安全的产品特性
+            - 操作系统保障示例：访问控制机制、特权和用户程序代码分离、审视和监视能力、隐蔽通道分析、可信恢复
+        - 生命周期保障
+            - 关注产品如何开发和维护，全生命周期各阶段满足标准规范
+            - 示例：涉及规范、限制级别配置、单元和集成测试、配置管理以及可信分发
+    - 操作责任
+        - 操作安全目标：降低可能由非授权访问或滥用造成损失的可能性
+        - 管理层负责雇员的行为和职责
+        - 操作部门的目标：防止反复发生问题，将硬件和软件故障降低到可接受的级别以减少事故或破坏的影响
+        - 关注内容
+            - 不寻常或无法解释的事件
+            - 偏离标准，偏离标准的安全事件
+            - 不定期的初始程序加载（重启）关注无故重启的设备
+            - 资产表示和管理，资产管理是指了解整个环境中的一切:硬件、固件、操作系统、语言运行时环境、应用程序以及不同的库
+            - 系统控制：确保指令在正确的上下文中执行
+            - 可信恢复：确保故障和操作中断不会破坏系统安全运行所需的机制和规程；
+            - 输入和输出控制：应用程序的输入和输出有直接的关联关系，需要监控输入中的内容
+            - 系统强化：禁用不需要的组件和服务；系统安全配置加固
+            - 远程访间安全：不得以明文方式传送命令和数据，应当使用SSH而不是telnet；应该在本地而不是远程管理;只允许少数管理员执行这种远程功能应对任何管理
+    - 信息安全生命周期管理
+        - Information has a life that consists of creation, use, and finally destruction 信息生命周期包括产生、分发、使用、维护、披露、处置（转让、安全处理）
+        - information owner 信息所有者
+            - Determine the impact the information has on the mission of the organization 确定信息对组织使用具有的影响
+            - Understand the replacement cost of the information (if it can be replaced) 了解信息的重置成本（如果它可以被取代）
+            - Determine who in the organization or outside of it has a need for the information and under what circumstances the information should be released. 决定哪个组织需要这些信息和在什么情况下应该发布这些信息。
+            - Know when the information is inaccurate or no longer needed and should be destroyed. 知道何时信息是不准确的或不再需要的，应当被销毁
+        - Classification and categorization 分级和分类
+            - Classification is concerned primarily with access 分级关注访问
+                - military or government information 军队或政府信息（秘密、机密、绝密）
+            - categorization is primarily concerned with impact 分类关注影响
+                - determining the impact of the loss of confidentiality integrity, or availability of the information 决定信息丧失机密性、完整性或可用性
+            - standardize the defense baselines 可使基线标准化
+        - 保留计划
+            - 降低存储成本
+            - 只保存相关的信息，可加快搜索和索引
+            - 诉讼保留和电子披露是不太可能会遇到错误，预决策或协商信息
+    - SLAs服务水平协议
+        - What
+            - SLA是一个描述客户从供应商获得服务水平的简单文档，展示服务测量指标、补救或如果达不到协议要求所遭受的惩罚
+            - SLA：外部
+            - OLA（Operational Level Agreements）：内部
+        - Why
+            - 确保双方理解要求
+            - 确保协议没有被有意或无意的曲解
+        - Who
+            - 不同的级别不同的价格
+            - 协商的起点
+        - 关键部分
+            - Service elements
+                - 提供具体服务
+                - 服务可用性状态
+                - 服务标准（时间窗）
+                - 升级程序
+                - 各方职责
+                - 服务/费用权衡
+            - Management elements
+                - 测量标准和方法定义、报告流程、内容和频率、争议解决过程
+            - SLA保持更新：供应商能力和服务需求变化
+        - 赔偿
+        - SLA不能转让
+        - 如何验证SLA
+            - statistics
+        - 测量指标
+        - What uptime provisions are typical for network service providers
+            - 99% availability (whic allows for over 7 hours of unplanned downtime per month)
+            - 99.9% (43.8 minutes per month)
+            - 99.99% (4.4 minutes per month)
+        - 何时评审SLA
+- 变更管理
+    - Request 请求
+    - Impact Assessment 影响评估
+    - Approval/Disapproval 批准/不批准
+    - Build and Test 构建和测试
+    - Notification 通知
+    - Implementation 实施
+    - Validation 验证
+    - Documentation 记录
+- 变更管理
+    - 目标：建立和维护产品、系统和项目整个生命周期的完整性
+    - 包括
+        - identifying configuration items for the software project 识别软件产品的配置项
+        - controlling these configuration items and changes to them 控制配置项及其变更
+        - recording and reporting status and change activity for these configuration items 记录和报告配置项的状态和变更活动，同时开展审计
+    - 配置管理
+        - 管理组件从最初的概念到设计、实施、测试、基线、构建、发布和维护
+        - 使得必然发生的变更可控
+        - 策略和标准
+            - 组件集处于配置管理的支配下
+            - 组件是如何命名的
+            - 组件是如何输入和离开控制集的
+            - 处理CM下的组件是如何被允许变更的
+            - CM下的不同版本的组件是如何可用的
+            - 在什么情况彼此每个都能使用
+            - CM工具是如何启动和加强配置管理的
+    - 可信恢复
+        - 目的
+            - 可信恢复的目的是确保在故障和运作中断的情况下维护系统的安全和职能功能；为了实现上述目的，系统应该加入一系列机制使其在预先定义的故障或中断发生时能够保持安全状态
+        - 类型
+            - 系统重启：以受控方式关闭系统，重新引导前不一致的数据已得到矫正，数据结构实际上处于一致状态
+            - 紧急系统重启动：以非受控方式关闭系统，重启前数据仍然处于不一致状态，重启进入维护状态自动执行恢复，将系统带入到一致状态
+            - 系统冷启动：自动化恢复机制将系统带入到一致状态（用于挫败攻击的启动方式）
+        - 系统崩溃后的正确步骤
+            - 进入单用户或安全模式
+            - 修复问题并恢复文件
+            - 确定关键的文件和操作
+        - 安全关注
+            - 引导顺序（C、A、D）应当不能重新配置
+            - 不应避开在系统日志中写入动作
+            - 应该禁止系统被迫关闭
+            - 应禁止输入变更线路
+    - 输入输出控制
+        - 一个应用的输入直接影响了输出的结果，因此应当监控输入存在错误或可疑行为
+        - 应用程序应当通过程序限定输入数据的类型并进行检查
+        - 应用系统输入控制的其他要求
+            - Data entered into a system should be in the correct format and validated to ensure that it is not malicious.
+            - Transactions should be atomic, meaning that they cannot be interrupted between the input being provided and the generation of the output. (Atomicity protects against a class of attacks called time-of-check/time-of-use, or TOCTOU)
+            - Transactions must be timestamped and logged.
+            - Safeguards should be implemented to ensure output reaches the proper destinations securely
+        - 当ActiveX components, plug-ins, updated configuration files, or devicedrives 准入系统生产环境之前，应通过可信权威机构的检测
+    - 硬件安全控制
+        - 网络设备的物理控制措施
+            - Wiring closets should be locked
+            - network switches and hubs，when it is not practical to place them in locked wiring closets，should be inside locked cabinets.
+        - 大容量存储设备介质的控制
+            - 物理控制+技术控制
+            - 包括Laptops，portable hard devices，mobile devices，and even camera memory cards
+        - 工作站的安全防护措施：做一个硬拷贝镜像，称作Gold Master（GM）
+        - 应用系统的安全防护：关注脆弱性检测与修复
+        - 组件的安全防护：对组件进行恰当的配置
+    - 软件许可控制
+        - 仅授权软件才可安装，禁止安装盗版软件
+        - 使用盗版软件或超授权数量、范围安装使用License是要追究法律责任的
+        - 应采取手段监控软件License使用情况
+    - 远程访问安全
+        - 远程访问是组织常用的运维方式，也是保障在灾难中得以恢复的重要手段，并可减少运维成本
+        - 远程访问是移动办公、出差等情况所选用的一种访问手段
+        - 风险
+            - 非授权访问、病毒和恶意代码引入等
+        - 安全措施
+            - 采用VPN技术进行网络安全接入
+            - 数据加密传输，即使使用了VPN技术
+            - 采取强认证措施
+            - 关键设备本地管理，而非远程管理
+            - 限制远程访问的管理员数量到最小化
+    - The CMMI steps for CM
+    - 资产清单
+        - 硬件库
+            - 品牌
+            - 型号
+            - MAC address
+            - 序列号
+            - Operating system or Firmware version
+            - Location
+            - BIOS and other hardware-related passwords
+            - Assigned IP address if applicable
+            - 组织资产管理的标签或条形码
+        - 软件库
+            - Software name
+            - Software vendor and reseller if appropriate
+            - 密码或激活码（note if there are hardware keys）
+            - Type of license and for what version
+            - Number of licenses
+            - License expiration
+            - License portability
+            - Organizational software librarian or asset manager
+            - Organizational contact for installed software
+            - Upgrade, full or limited license
+        - 软件库和硬件库的安全作用
+            - 安全专家能迅速找到和减少与硬件类型和版本的漏洞
+            - 知道网络中硬件类型和位置能降低识别受影响设备的工作量
+            - 可以经扫描发现网络中未经授权的设备
+        - 维护配置清单
+            - 记录和追踪配置的变更能提供网络完整性和可用性的保障
+            - 定期检查确保非授权变更
+    - CM适用于不同类别资产管理
+        - Physical assets (e.g., servers, laptops, tables, smartphones)
+        - Virtual assets (e.g., Software Defined Networks, virtual SAN)
+        - systems, virtual machines
+        - Cloud assets (e.g., services, fabrics, storage networks, tenants)
+        - Applications (e.g., workloads in private clouds, Web services, Software as a Service)
+    - 云资产供给
+        - Infrastructure as a Service（IaaS）
+            - 供给受限于非云物理设备的性能，如路由器、服务器实机，他们的性能常会影响大量用户
+            - 因此这些非云物理设备的变更应格外慎重
+                - Only a very samll group IT personnel should be able to perform such provisioning.
+                - these provisioning actions often require the approval of the senior leadership or of the change control committee
+        - Platform as a Service (PaaS)
+            - 要确保能访问平台服务的开发人员范围是受控的
+        - Software as a Service (SaaS)
+            - 灵活的配置软件及平台资源的访问，达到安全高效的目的，最佳防守是就近自主获取资源。
+- 补丁和漏洞管理
+    - 目的
+        - 建立持续配置环境保护操作系统和应用的已知漏洞
+        - 很多时候厂商升级版本时不给出升级的原因和理由
+    - 补丁管理考虑的风险因素
+        - 是否通过管理层批准
+        - 是否遵从配置管理策略
+        - 是否考虑带宽利用率
+        - 是否考虑服务可用性
+    - 补丁集中管理
+        - 是补丁管理的最佳实践
+        - 分类
+            - 基于代理
+                - 在每个设备上都安装了一个更新代理
+                - 该代理与一个或多个更新服务器进行通信
+                - 并将可用补丁与本地主机上的软件和版本进行比较，根据需要进行更新
+            - 无代理
+                - 有一个或多个主机，使用管理凭据远程连接到网络上的每个设备，并检查所需的更新的远程设备
+            - 被动方式
+                - 被动监视网络流量，推断每个网络应用或服务的补丁级别
+                - 对终端设备影响最小
+                - 并不总是能够唯一地识别软件版本
+        - 虚拟化技术使你更容易建立补丁实验室
+        - 一些控制措施可以减轻软件漏洞的影响，例如防火墙、IDS等，给我们预留测试补丁的时间
+        - 逆向补丁工程
+            - 应对0 day攻击
+            - 通过逆向工程供应商可用推出软件补丁
+            - 通过逆向工程黑客更容易开发最新的漏洞
+            - 取决于黑客和供应商应用逆向工程的速度
+    - 补丁管理步骤
+        - 安全专家需要判断是否是漏洞
+        - 是否需要升级补丁
+            - 基于风险决策
+            - 补丁的重要程度
+        - 管理层和系统属主来确定是否更新补丁：是否会影响业务
+        - 更新补丁已被测试以及残余风险被解决
+            - 安排更新
+            - 部署前通知用户
+            - 在夜间或周末更新
+            - 部署前备份服务器
+        - 更新完成后需要在生产环境中验证：可能会产生一些不可见的问题
+        - 部署完成后确保所有适当的机器都被更新
+        - 记录所有变更
+    - 安全和补丁信息管理
+        - 关键部分
+            - 补丁管理是要知道关于安全问题和补丁发布两者的信息
+            - 知道与他们环境有关的安全问题和软件更新
+            - 建议专人和团队负责提醒管理员和用户的安全问题或应用的更新
+        - 补丁优先级和作业安排
+            - 补丁生命周期（patch cycle）指导补丁的正常应用和系统的更新
+            - 作业计划处理关键安全和功能补丁和更新
+    - 补丁测试
+        - 补丁测试的广度和深度
+        - 补丁测试流程开始于软件更新的获取和在生产部署后连续通过可接受性测试
+        - 补丁获取时需要进行验证
+            - 来源（source）校验
+            - 完整性（integrity）校验
+                - 数字签名
+                - 校验和
+        - 补丁校验完成后进行测试
+            - 测试环境尽可能的接近生产环境
+            - 可以用生产系统的子系统作为测试环境
+    - 补丁变更管理
+        - 变更对补丁管理的每一步都非常重要
+        - 修补应用程序应包含应急和回退计划
+        - 变更管理方案中包含监控和可接受计划
+            - 证明补丁成功具体里程碑和可接受标准
+            - 允许关闭变更系统中更新
+    - 补丁安装和部署
+        - 补丁管理的部署阶段必须具有良好经验的管理员和工程师
+        - 安装和部署意味着生产系统的补丁和更新会真实实施
+        - 影响补丁部署的技术因素是工具的选择
+            - 工具选择
+                - 购买
+                - 自建
+            - 工具类型
+                - agent-based
+                - agentless systems
+        - 部署安全补丁
+            - 及时完成
+            - 可控和可预期
+    - 补丁评审和评估
+        - 常规审计和评估能够衡量补丁管理成功和程度
+        - 两个问题
+            - 对于任何已知漏洞或Bug什么系统需要修补？
+            - 系统是否更新真实的补丁
+        - 关键成功因素
+            - 资产和主机管理：理想主机管理软件能生成报告
+            - 管理工具
+        - 系统发现和审计作为审计和评估流程的部分
+    - 一致性和复合型
+        - 补丁管理方案中的审计和评估元素能帮助识别系统不符合组织指南或其他减少不符合的工作
+        - 系统声称工具和指南在安装时确保符合补丁要求主要执行手段
+        - 补丁管理技术非常重要，但仅靠技术不行
+            - 补丁管理方案是团队技术提供基于协作解决组织独特要求的方针和运维的解决方案
+    - 漏洞管理系统
+        - 配置管理：帮助组织知道其所有部分
+        - 脆弱性扫描：识别这些弱点
+        - 漏洞类型
+            - 系统缺陷：product design imperfections
+            - 配置错误：represent implementation errors that expose a system to attack
+            - 策略错误：individuals fail to follow or implement security as required
+        - 基于主机的扫描
+            - identifying missing security updates on servers
+            - identify unauthorized software or services that might indicate a compromised system
+            - conducted at the system console or through the use of agents on servers and workstations throughout the
+        - 应用安全扫描
+        - 数据库安全扫描：发现配置错误
+- 事件管理
+
 {% endmarkmap %}

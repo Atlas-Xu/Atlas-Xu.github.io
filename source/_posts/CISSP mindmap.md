@@ -1145,7 +1145,7 @@ date: 2024-04-25 00:20:00
 
 
 # Domain 3. Security Architecture and Engineering （安全工程）
-{% markmap 2400px %}
+{% markmap 1500px %}
 - 安全架构
     - 在系统工程生命周期中使用安全设计原则
         - 系统工程
@@ -1441,6 +1441,708 @@ date: 2024-04-25 00:20:00
     - 实施物理安全计划
     - 物理安全运行
 {% endmarkmap %}
+
+# Domain 4. Communication and Network Security（通信与网络安全）
+{% markmap 2000px %}
+- 网络基本概念
+    - 协议
+        - 决定系统如何在网络中通信的规则标准集
+        - 对等层之间通信要遵守一定的规则,如通信内容,通信方式,这个规则称为协议
+    - 分层
+        - 将网络互联任务、协议和服务分为不同的层
+        - 每一层都有自己的职责;每一层都有特定的功能并且由那一层内工作的服务和协议来实现
+        - 每一层都有一个特殊的接口，允许与其他三层交互
+            - 与上层的接口通信
+            - 与下层的接口通信
+            - 与目标地址接口中的相同层通信
+    - 封装
+    - 解封装
+- 开放互联网参考模型OSI
+    - 应用层,7层
+        - 与用户最为接近的地方
+        - 提供文件传输、消息交换、终端会话以及执行应用程序的网络请求
+        - 包括:HTTP/80、LPD、FTP/21、SMTP/25、POP3/110、https/443、ssh/22、TELNET/23、TFTP/69
+    - 表示层,6层
+        - 将信息变为所遵循OSI模型的计算机都能理解的格式
+        - 表示层关心数据的格式和语法，处理数据压缩和加密
+        - 典型的协议有:ASCII、JPEG、MPEG等
+    - 会话层,5层
+        - 负责连个应用程序之间建立连接
+        - 管理主机之间的会话进程，负贵建立、管理、终止进程问的会话。
+        - 典型的协议有：NETBIOS、SQL、RPC等。
+    - 传输层,4层
+        - 传输层提供了端对端数据传输服务，并且在两台通信计算机之间建立连接
+        - 会话层建立应用程序连接，传输层建立计算机系统之间的连接
+        - 典型的协议有：TCP、UDP、SSL等
+        - 数据单位为段
+    - 网络层,3层
+        - 负责对子网间的数据包进行路由选择实现拥塞控制、网际互连等功能。
+        - 数据单位为数据包(packet)
+        - 典型的协议有:ip、icmp、igmp、bgp、rip、OSPF等
+    - 数据链路层，2层
+        - 数据链路层在不可靠的物理介质上提供可靠的传输
+        - 作用有：物理地址寻址、数据的成帧、流量的控制、数据的检错、重发等。
+        - 典型的协议：IEEE802.3、802.11、L2TP、PPP、ATM、帧中继、arp/rarp等。
+        - 数据单位为帧(frame)
+    - 物理层，1层
+        - 规定了激活、维持、关闭通信端点之间的机械特性、电气特性、功能特性以及过程特性
+        - 数据单位为比特(bit)
+        - 典型规范代表：EIA/TIA RS-232，RJ-45
+- 传输类型
+    - 模拟vs数字+
+        - 模拟信号：即信号的波幅、频率、相位是连续变化的，传输速率低
+        - 数字信号：即信号是不连续的脉冲，不易失真，传输速率高
+    - 异步vs同步
+    - 宽带和基带
+        - 将数字或模拟信号直接加到电缆中进行传输，信号不经过调制使用电缆的整个信道，以太网属于基带网络
+        - 将多路不同的信号通过调制到不同的"载波"频率上加载到电缆上，即整个电缆的带宽被划分到不同的信道，如同时支持话音、图像和数据传输、有限电视就是基于宽带的网络
+- TCP/IP：数通已学，此处不放
+- 局域网技术
+    - 网络拓扑
+        - 环形
+        - 总线型
+        - 星型
+        - 网状型
+    - 传输介质
+    - 局域网实现类型
+        - 以太网
+            - 由IEEE802.3标准定义
+            - 物理上星型，逻辑上总线
+            - 使用广播域和冲突域
+            - 采用CSMA/CD介质访问控制技术
+            - Ethernet/IEEE802.3(同轴电缆上10Mbps)
+            - FastEthernet双绞线上(100Mbps)
+            - GigabitEthernet(光纤或双绞线上1Gbps)
+        - 令牌环
+            - IEEE802.5标准
+            - 逻辑环，通常物理星型连接
+            - 每个节点都要再生信号
+            - 负载带宽可预测，4Mbps或16MbpS
+        - FDDI
+            - 令牌传递网络，采用两个相反的环路主环顺时针，副环逆时针，使用主动监控和信标
+            - 速度可达100mbps
+            - 典型用在LAN/WAN的骨干上
+            - CDDI(铜缆分布式数据接口)工作在UTP上
+    - 介质访问技术
+        - 令牌传递
+            - 令牌环和FDDI技术采用
+            - 拥有令牌计算机具有通信的权利
+        - CSMA
+            - CSMA/CD
+            - CSMA/CA
+            - 冲突域
+            - 广播域
+        - 轮询：主要用于大型机系统环境中
+    - 布线
+        - 概念
+            - 数据吞吐率是经过压缩和编码之后实际通过线缆的数据量
+            - 带宽可以视为管道
+            - 数据吞吐率则是通过管道的实际数据量
+        - 同轴电缆
+        - 双绞线
+            - 屏蔽双绞线（STP）和非屏蔽双绞线（UTP）
+            - 双绞线具有缠绕的铜线，缠绕是为了避免无线电频率干扰
+            - 双绞线存在信号的衰减
+            - UTP是最不安全的网络互联线缆
+        - 光纤
+        - 布线问题
+    - 传输方法
+    - 局域网协议
+        - 地址解析协议，ARP
+        - 动态主机配置协议，DHCP
+        - Internet控制消息协议，ICMP
+    - 路由协议
+        - 单独网络成为自治系统AS
+        - 距离向量
+        - 链路状态
+        - 路由器连接不同AS所使用的外部路由协议，通常被称为外联网关协议BGP
+- 网络和安全设备
+    - 网络互联设备
+        - 中继器和集线器
+        - 网桥和交换机
+        - 路由器
+        - 网关
+        - PBX
+            - 控制模拟和数字信号的数字交换设备
+            - pbx的内部安全管理问题，例如窃听、话费等这些问题
+        - CDN
+        - SDN
+    - 地址转换协议，NAT（NAT不仅能解决了IP地址不足的问题，而且还能够有效地避免来自网络外部的攻击，隐藏并保护网络内部的计算机，在路由器、防火墙上实施）
+        - 静态映射
+        - 动态映射
+        - 屏蔽内网地址（源地址转换）
+        - 段间地址转换
+    - 安全设备
+- 远程访问技术
+    - 身份认证协议
+        - AAA：Authentication 认证，Authorization 授权，Accounting 问责 / Auditing 审计
+        - RADIUS
+            - Remote Authentication Dial In UserService，远程用户拨号认证系统
+            - 使用UDP协议
+        - TACACS：Terminal Access ControllerAccess-ControlSystem，终端访问控制器访问控制系统
+        - TACACS+
+            - 双因素密码认证(允许使用动态密码)
+            - 使用TCP协议
+        - CHAP， 挑战握手身份验证协议
+        - PAP，密码身份验证协议，明文发送凭证
+        - EAP，(是一个可扩展的身份验证框架)可扩展身份验证协议
+    - 身份认证方法
+        - call-back
+        - call-ID
+    - 拨号和RAS
+    - 综合业务数字网，ISDN
+    - 专用线路
+    - 数字用户线路，DSL
+        - 对称DSL，SDSL：数据以相同的速率上行和下行适用于双向高速传输的业务
+        - 高位率DSL，HDSL：需要两对双绞线，在常规通电话线上提供T1的速率
+        - 非对称DSL，ADSL：数据下行的速度比上行的速度更快，适用于家庭用户
+        - IDSL：与交换中心较远的用户使用，128Kbps的对称速度
+    - 线缆调制解调器
+        - 提供最高为50Mbps的高速访问通过现有的同轴电缆或光纤访问
+    - VPN
+        - 协议
+            - PPTP，点对点隧道协议
+                - 工作在数据链路层
+                - 点对点连接
+                - 只能通过IP网络传输
+                - 为客户/服务器连接而设计
+                - 把PPP帧封装成IP报文进行隧道传输
+                - 使用MPPE加密
+            - L2F
+                - 由cisco在L2TP之前创建
+                - 与PPTP合并形成L2TP
+                - 提供相互的身份验证
+                - 没有加密
+            - L2TP
+            - IPSec
+                - 能够同时处理多个连接
+                - 提供安全的身份验证和加密
+                - 工作在网络层
+                - 两种模式:隧道模式及传输模式
+                - AH/ESP/SA/ISKAMP/IKE等重要协议
+            - SSL
+        - VPN使用隧道协议确保数据在传输中的机密性与完整性
+        - 第一个变化：虚拟路径
+        - 第二个变化：封装和加密
+- 广域网
+    - 交换技术
+        - 电路交换连接
+        - 分组交换连接
+        - 信元交换连接
+    - 专用链路
+    - CSU/DSU
+    - 广域网虚电路
+    - 帧中继
+    - X.25
+    - 交换式兆位数据服务SMDC
+    - 同步数据链路控制，SDLC
+    - 高级数据链路控制，HDLC
+    - 高速串行接口，HSSI
+    - 多服务访问控制
+    - VoIP
+        - 语音并不是通过电信运营商的传统电话网络（语音网络）进行传输，而是将语音转化为IP数据包，基于IP网络传输技术
+        - H.323网关
+        - SIP网关
+        - VoIP安全问题及对策
+    - 广域网复用技术
+        - 时分复用STDM
+        - 频分复用FDM
+        - 波分复用WDM
+        - 密集波分复用DWDM
+- 无线技术
+    - WAP
+        - 无线应用协议
+        - 基于WML无限标记语言，基于XML
+        - WAP自已具有会话和传输协议以及无线传输层安全(WTLS)的传输层安全协议
+        - 匿名身份验证：无线设备和服务器彼此不进行身份验证
+        - 服务器身份验证：服务器对无线设备进行身份验证
+        - 双向客户端和服务器身份验证：无线设备和服务器相互进行身份验证
+    - i-mode：imode是一个名为HTML的精简版HTML
+    - 802.11
+        - 802.11 b
+            - 最高达11Mbps的速率
+            - 2.4Ghz
+        - 802.11 a
+            - 最高达54Mbps的速率
+            - 5Ghz频率范围
+        - 802.11 n
+            - QoS
+        - 802.11 g
+        - 802.11 i
+    - 802.1X：802.1X是IEEE制定的关于用户接入网络的认证标准。802.1X协议在用户/设备接入网络（可以是LAN，也可以是WLAN）之前进行验证，运行于网络中的MAC层。
+    - 蓝牙，Bluetooth
+    - 扩频技术
+    - 无线局域网（WLAN）
+    - 无线通信技术
+        - 卫星通信
+        - 移动通信技术
+- 网络互联服务和协议
+    - 域名服务，DNS
+        - 威胁
+            - DNS缓存中毒：DNS缓存中毒攻击主要是针对递归解析方式工作并缓存非本域的解析结果的DNS 服务器。
+        - DNS安全
+            - DNSSEC，加强DNS的身份验证机制
+            - 开发 DNSSEC技术的目的之一是通过对数据进行"数字签名"来确保完整性
+    - 工控系统，SCADA
+        - 数据采集和监控
+        - ModBus，FieldBus协议
+- 面临威胁
+    - 移动电话安全
+        - 电话具有摄像头和存储敏感信息
+        - 身份验证，可能存在伪基站
+        - 手机克隆
+    - WLAN战争驾驶攻击
+    - 间谍软件和广告软件
+    - 即时通信
+    - 拒绝服务攻击（DOS）
+        - TCP
+            - SYN Flood
+                - 攻击过程原理
+                - TCP三次握手受到攻击
+        - UDP
+            - fragile：发送海量UDP
+            - teardrop：UDP包重组时重叠导致死机
+        - TCP sequence number attack
+        - 利用icmp协议攻击
+            - ping of death：发送畸形icmp包
+            - smuff：发送海量广播包导致死机
+    - 分布式拒绝服务攻击DDOS
+        - 反射器、放大器攻击
+        - 流量牵引、清洗、回传
+{% endmarkmap %}
+
+# Domain 5. Identity and Access Management (IAM 身份与访问管理)
+
+
+
+# Domain 6. Security Assessment and Testing（安全评估和测试）
+- 基本概念
+    - Security Assessment and Testing：安全评估和测试包含广泛的现行和基于时间点的测试方法用于确定脆弱性及其相关风险。
+    - T&E的基本目标
+        - T&E能衡量系统和能力开发进展：T&E的专长就是对系统生命周期在开发过程提供系统强度和弱点的初期认知
+        - 为协助在开发、生产、运营和维护系统能力过程中的风险管理提供相应的知识
+        - 能够在部署系统之前识别技术的、操作的和系统缺陷以便开发适当的及时的纠正行为
+    - T&E策略
+        - 测试和评估战略的内容是具有应用于获取/开发流程、所提供的能力要求以及技术驱动所需能力的功能。
+        - 倾向于
+            - 管理风险所需认知
+            - 验证模型和仿真的经验数据
+            - 技术性能和系统成熟度的测试
+            - 运维效能、适应性和生存能力的确定
+        - 目标：识别、管理和降低风险
+    - Topics
+        - Assessment and Test Strategies
+        - Security Control Testing
+            - Vulnerability Assessment
+            - Penetration Testing
+            - Log Reviews
+            - Synthetic Transactions
+            - Code Review and Testing
+            - Negative Testing
+            - Misuse Case Testing
+            - Test Coverage Analysis
+            - Interface Testing
+        - Collect Security Process Data
+            - Account Management
+            - Management Review
+            - Key Performance and Risk Indicators
+            - Backup Verification Data
+            - Training and Awareness
+            - Disaster Recovery and Business Continuity
+        - Test Output
+            - Automated
+            - Manual
+        - Conduct or Facilitate Internal and Third-Party Audits
+    - Objective
+        - Design and validate assessment and test strategies.
+        - Conduct security control testing.
+        - Collect security process data (e.g, management andoperational controls).
+        - Analyze and report test output.
+        - Conduct or facilitate internal and third-party audits.
+- 评估与测试策略 Assessment and Test Strategies
+    - T&E策略
+        - 策略的作用
+            - 管理风险所需认知
+            - 验证模型和仿真的经验数据
+            - 技术性能和系统成熟度的测试
+            - 运维效能、适应性和生存能力的确定
+        - 系统工程师和安全专家
+            - 与主办单位一块建立或评价用于支持程序获取/开发的T&E策略;
+            - 提供能深度管理风险的T&E的方法;
+            - 监控T&E流程以及可能需要的变更;
+            - 评价测试计划和程序是否适用于开发测试或运行测试，并提供建议;
+            - 进一步被希望理解获取/开发程序的背后的理由以用于建立和执行T&E策略:
+            - 期望理解T&E测试的具体活动，如interoperability testing,信息保障测试;
+        - 企业需要建立工作小组
+            - 这个小组通常被称为T&E集成产品团队，由T&E专家、客户用户代表和其他利益相关者组成;
+            - T&E策略是活动文档，该小组负责在需要时进行更新
+            - 该小组需要确保T&E流程包含获取策略以及系统满足基于用于能力的操作要求:
+    - 日志评审
+        - 日志与计算机安全有关：如路由日志分析有利于识别安全事故、策略违背、欺诈行为和操作问题等
+        - 日志作用
+            - 执行审计和取证调查
+            - 支持内部调查
+            - 识别运行趋势以及发现长期问题
+        - 挑战
+            - 需要平衡有限的日志管理资源和持续产生的日志数据
+            - 日志的生产和存储
+                - 不同的日志来源
+                - 不一致的日志内容、格式以及时间戳等
+                - 日志数据的大量生成
+            - 需要保护日志的完整性、机密性和可用性
+            - 确保安全、系统和网络管理员定期有效的分析日志数据
+        - 日志管理的方针和程序
+            - 定义日志需求和目标
+                - 开发清晰定义日志管理活动的强制要求和推荐要求
+                - 集成和支持日志管理要求和推荐
+                - 管理层应提供必要的支持
+            - 日志需求和建议应与实施和维护日志所需的资源和细节分析技术一块生成
+            - 原始日志的保护
+        - 优化日志管理 Prioritize Log Management
+            - 优化日志和需求，基于组织风险减少的感知以及执行日志管理所需资源和预期的时间
+            - 建立日志管理的职责和角色
+        - 建立和维护日志管理架构 Create and Maintain aLog Management Infrastructure
+            - 日志管理架构包含硬件、软件、网络和介质用于生成、传输、存储、分析和处置日志
+            - 设计日志管理框架时应考虑管理框架现在和未来的需求以及整个组织的独立日志源
+                - centralized log servers and log datastorage集中式日志服务器和日志数据存储
+                - volume of log data to be processed要处理的日志数据量
+                - network bandwidth
+                - online and offline data storage
+                - the security requirements for the data
+                - the time and resoutces needed for staff to analyzethe logs人员分析日志所需的时间和资源
+        - 为所有员工的日志管理职责提供适当支持Provide Proper Support for All Staff with Log Management Responsibilities
+            - 系统的管理员应获得足够的支持
+            - 包括信息传播、提供培训、提供问题解答的联系点、提供具体的技术指南、提供相应的工具和文档
+        - 标准日志管理流程 Standard Log Management Operational Processes
+            - 日志管理员职责
+            - 日志管理流程
+            - 日志来源
+                - logs —— network-based and host-based security software
+                - logged types of information
+                    - 客户端请求和服务器响应
+                    - 账号信息
+                    - 使用信息
+                    - 重要的操作活动
+            - 挑战
+                - 日志的分布属性、日志格式的不一致以及日志的容量都构成日志管理的挑战
+                - 必须保护日志的机密性、完整新和可用性
+                    - Organizations also need to protect the availability of their logs.
+                    - The confidentiality and integrity of the archived logs also need to be protected
+                - 系统和网络管理员
+                    - 需要分析日志
+                    - 无法有效进行日志分析
+                        - 没有受到良好的培训
+                        - 没有工具支撑
+                - 日志分析常常是响应型的 reactive
+                - 许多日志分析需要实时或近乎实时的
+            - Key practices
+                - 在全组织适当的优化日志管理
+                - 监理日志管理策略和程序
+                - 建立和维护安全日志管理基础设施
+                - 为所有员工的日志管理提供适当的支持
+    - 合成交易（Synthetic Transactions）与真实用户监控（Real User Monitoring，RUM）
+        - 真实用户监控RUM
+            - Web监控方法，旨在捕获或分析Web或应用上每个用户的每笔交易
+            - 又称为real-user measurement真实用户测量，real-user metrics真实用户指标,or end-userexperience monitoring（EUM）最终用户体验监控
+            - passive monitorin 被动监控的方式
+            - 监控模式
+                - bottom-up forms ：为重新重构用户体验而捕获服务端信息
+                - top-down client-side RUM
+        - 合成交易
+            - proactive monitoring 主动或预响应监控的方式
+            - 并不追踪真实的用户会话
+            - full control over the client
+                - 不像沙盒JAVA脚本方式驱动的RUM，细节的获得可以更客观
+            - Microsoft’s System Center Operations Manager software
+                - Website Monitoring
+                - Database Monitoring
+                - TCP Port Monitoring
+            - 提升价值wht
+                - Monitor application availability 24 x 7
+                - Know if a remote site is reachable
+                - Understand the performance impact that third-party services have on business apps
+                - Monitor performance availability of SaaS,applications and supporting cloud infrastructure such as laaS and PaaS
+                - Test B2B Web services that use SOAP,REST, or other Web service technologies
+                - Monitor critical databases queries for availability
+                - Objectively measure service-level agreements（SLAs）
+                - Baseline and analyze performance trends across geographies
+                - Complement real user monitoring by synthetically monitoring availability during periods of low traffic
+    - 代码审核和测试
+        - 导致漏洞的常见原因 vulnerabilities are caused
+            - 不恰当的编程模式，如缺少检查影响用户的数据，SQL注入
+            - 安全基础设施的误配：访问控制权限过大或脆弱的加密配置
+            - 安全基础设施的功能错误：访问控制强制设施本身不限制系统的访问
+            - 实施流程的逻辑错误：比如用户下订单而不用支付
+        - 常见软件漏洞 Common Software Vulnerabilities
+            - Insecure Interaction between Components 组件之间的不安全交互
+            - Risky Resource Management 有风险的资源管理
+            - Porous Defenses 漏洞百出的
+        - testing techniques
+            - Black-Box-Testing vs. White-Box-Testing
+            - Dynamic Testing vs. Static Testing动态测试 VS. 静态测试
+            - Manual Testing vs. Automated Testing
+        - security testing considering
+            - Attack Surface
+            - Application Type
+            - Quality of Results and Usability
+            - Supported Technologies
+            - Performance and Resource Utilization
+        - During Planning and Design
+            - Architecture Security Reviews
+                - 先决条件：架构模型
+                - 优点：验证架构偏离安全标准
+            - 威胁建模 Threat Modeling
+                - 先决条件：业务用例或使用场景
+                - 识别威胁、及其影响以及具体到软件产品开发过程中的潜在控制措施
+        - During Application Development
+            - Static Source Code Analysis (SAST) and Manual Code Review (静态代码分析和手动代码评审)
+            - Static Binary Code Analysis and Manual Binary Review (静态二进制代码分析和手工二进制审查)
+        - Executable in a Test Environment
+            - Manual or Automated Penetration Testing
+            - Automated Vulnerability Scanners
+            - Fuzz Testing Tools模糊测试工具
+    - 系统运行和维护中的测试
+        - 软件测试特点
+            - 软件维护过程中，补丁的测试非常重要
+            - 软件测试有其限制，不可能100%测试完成
+            - 测试计划和测试用例应尽可能早的在软件开发阶段进行开发
+        - 软件测试原则
+            - The expected test outcome is predefined
+            - A good test case has a high probability of exposing an error
+            - A successful test is one that finds an error.
+            - There is independence from coding
+            - Both application (user) and software (programming) expertise are employed.
+            - Testers use different tools from coders.
+            - Examining only the usual case is insufficient
+            - Test documentation permits its reuse and an independentconfirmation of the pass/fail status of a test outcome duringsubsequent review.
+        - 代码级别的测试 Code-based testing
+            - 软件的安全测试一般起始于单元级别的测试和结束于系统级别测试
+            - The level of structural testing
+            - 结构化测试
+                - 结构化测试用于测试“死亡”代码，这些代码在程序运行过程永远不会使用
+                - 结构化测试主要是放在模块级别的测试;
+                - 结构化测试级别可以用被测试的软件结构的百分比来作为指标来衡量;
+            - 白盒测试
+            - 测试用例基于从源代码、细节设计规格说明和其他开发文档中获得的知识
+        - Common structural coverage
+            - Statement Coverage：语句覆盖率
+            - Decision (Branch) Coverage：判断覆盖率
+            - Condition Coverage 条件覆盖率
+            - Multi-Condition Coverage
+            - Loop Coverage：循环覆盖率
+            - Path Coverage：路径覆盖率
+            - Data Flow Coverage
+        - 基于定义或基于规格的测试 Definition-based or specification-based testing被称为功能性测试或“黑盒”测试 (functional testingor blackbox testing)
+            - 测试用例基于软件产品具体要做什么来定义的
+            - 测试用例的主要挑战是预期用途和程序功能以及程序的内外部接口
+            - 功能性测试应用于任意级别的软件测试，从单元测试到系统级别的测试
+        - functional software testing
+            - NormalCase 普通用例
+            - Output Forcing 输出要求
+            - Robustness 鲁棒性
+            - Combinations of Inputs 输入组合
+            - weakness：很难将结构化和功能化测试的完成标准与软件产品的可靠性链接起来
+        - 统计测试方法 statistical testing
+            - 提供高结构化覆盖率
+            - 从基于运行环境(软件产品的预期使用、危险使用或恶意使用)定义的分布来生成随机数据
+            - 生成大量测试数据并用于覆盖到特别领域或所关注的地方，提供增加识别单个和极其罕见的运行状况的可能性，这些运行状况没有被
+        - 软件变更测试
+            - 原因
+                - 调试发现的问题并进行纠正
+                - 新的或变化的需求
+                - 发现设计的修改能更高效或有效实施
+            - 目的
+                - the change was implemented correctly
+                - did not adversely impact other parts
+                - Regression analysis andtesting 回归分析和测试，are employed toprovide assurance
+                    - 回归分析：确定变更的影响，基于相关文档(软件规格说明、设计规格、源代码等)的评审，也是为识别运用必要的回归测试
+                    - 回归测试：运用之前程序执行正确的测试用例，比对现有结果和以前的结果发现软件变化的非预期结果。
+        - 严格和完整的测试
+            - Unit (module or component) level testing 单元测试
+            - Integration level testing 集成测试
+            - System level testing 系统测试
+                - Security and privacy performance (e.g., functionof encryption, security log reporting)
+                - Performance issues (e.g, response times,reliability measurements)
+                - Responses to stress conditions (e.g., behaviorunder maximum load
+                - Operation of internal and external security features
+                - Effectiveness of recovery procedures, including disaster recovety
+                - Usability
+                - Compatibility with other software products
+                - Behavior in each of the defined hardwareconfigurations
+                - Accuracy of documentation
+        - 测试注意事项
+            - 系统测试将呈现在特定环境中软件产品的行为
+            - 测试程序、测试数据和测试结果应以获得允许通过/失败决策的方式记录
+            - 企业的软件产品是复杂的，软件产品的测试需要保持一致性、完整性和有效性
+            - 软件维护任务和硬件维护不一样，硬件有预防性维护措施而软件没有
+            - 需要有效验证变更
+        - 其他的维护任务
+            - Software Validation Plan Revision 软件验证计划修订
+            - Anomaly Evaluation 异常验证
+            - Problem Identification and Resolution Tracking 问题识别和解决跟踪
+            - Proposed Change Assessment 请求变更评估
+            - Task Iteration 任务选代
+            - Documentation Updating 文档更新
+    - 用例和误用例
+        - 用例 Use cases
+        - 误用例 misuse case：来自对系统怀有恶意的人员视角的用例
+        - 正向测试 Positive testing
+            - determines that yout application works as expected
+            - 确定应用按照所期待的方式进行工作，如果在正向测试中发现错误则失败
+        - 负向测试 Negative testing
+            - ensures that your application can gracefully handle invalid input or unexpected user behavior
+            - 确保应用可以妥善处理无效输入或非预期用户行为
+            - Throwing an excepton is expected in negative testing
+            - Typical Negative Testing Scenarios
+    - 接口测试
+        - 目的
+            - 主要检查应用或系统开发的不同组件彼此是否同步
+            - 从技术层面接口测试主要用于确定不同功能诸如数据在系统的不同元靠中是否按照设计进行传输
+            - 用于确保软件的质量
+        - check and verify
+            - server interface
+            - external interface
+            - internal interface
+        - moderator 核查员
+            - 不需要与终端用户进行任何的沟通
+            - 记录用户面向应用的反应
+            - 在会话端，他访谈终端用户并将他们的反馈发给开发者
+            - 通过这种方式，接口测试改进软件的所有的可接受性以及客户的体验
+    - 渗透测试
+        - 应所有者的要求模拟攻击一个网络及其系统的过程
+        - 渗透测试类型屈居于组织机构、它的安全目标和管理层的目标
+        - 渗透测试报告应该提交给管理层
+        - 应签署授权测试范围的授权书(需要得到管理层的授权)
+        - 步骤
+            - 发现，搜集和收集目标的相关信息
+            - 枚举，执行端口扫描和资源标识方法
+            - 脆弱性映射，在确定的系统和资源中标识脆弱性
+            - 利用，尝试利用脆弱性进行未授权访问
+            - 向管理层报告，想管理层提交报告和安全建议
+        - 分类
+            - 黑盒测试，零了解，渗透团队在不了了解测试目标的情况下测试
+            - 灰盒测试，在了解一些与测试目标相关的信息上测试
+            - 白盒测试，了解目标的本质的基础上测试
+        - 渗透性测试团队分类
+    - 战争拨号
+        - 从一系列电话号码中拨号寻找可用的调制解调器
+        - 有些组织仍然使用调制解调器用于通信备用
+        - 战争拨号是一种旨在避开防火墙和入侵检测系统(IDS)侵入组织网络的形式
+        - 战争拨号攻击包括通过拨入访问试图获得组织的内部计算和网络资源访问权，这给黑客入侵带来了便利性。
+        - 自我测试：管理员通过战争拨号方法测试组织内未经授权安装的调制解调器，对组织中随意安装者进行再教育。
+    - 其他脆弱性类型
+        - Kernel flaws 内核漏洞
+        - Buffer overflows 缓冲区溢出
+        - Symbolic links 符号链接
+            - 黑客重新定向符号链接，从而达到非授权访问的目的。
+            - 对策：在编写程序(尤其是脚本)时，无法规避文件的完整路径
+        - File descriptor attacks 文件描述攻击
+            - 文件描述符是许多操作系统用来表示进程中打开文件的数字，某些文件描述符数是通用的
+            - 如果程序不安全地使用文件描述符，可能会导致攻击者利用程序特权将意外的输入提供给程序
+            - 对策：良好的编程实践和开发教育，自动化源代码扫描仪和应用程序安全测试安全测试都是减少这种类型
+        - Race conditions 竞态条件（多进程和多线程环境下）
+            - 在执行程序前未消除环境的脆弱性因素
+            - 会导致攻击者读取或写入意外数据或执行未经授权的命令
+            - 对策:良好的编程实践和开发教育，自动化源代码扫描仪和应用程序安全测试
+        - File and directory permission 文件和目录权限
+- 收集安全流程数据 Collect Security Process Data
+    - 内部和第三方审计 Internal and Third-Party Audits
+    - 审计需求
+        - 法律法规需求
+            - 如美国联邦信息安全法案(FISMA Federal Information Security Management Act)要求联邦机构每年至少对组织的信息安全体系进行一次自我审计和独立的第三方审计
+            - 信息安全专家需要理解法律标准中所概述的要求以提供保护，但极少做到完全的保护或信息系统的风险管理
+            - 信息安全专家必须确保恰当的范围和裁剪为目标系统在正确的级别上获得适当数量的控制
+        - 合规
+            - Federal Information Security Management Act (FISMA)
+        - 业务驱动
+            - 组织常更新外包服务商的监控流程以及管理与外包的风险
+            - 历史上，许多组织常借鉴Statementon Auditing Standards (SAS)70 reports审计准则说明以获得对外包活动的安慰，然而SAS70关注财务报告内部控制(ICOFR)，而不关注系统可用性和安全。
+            - SAS 70 报告已在2011退休，取而代之但是SOC（Service Organization Control）报告
+    - 内部审计
+        - 组织拥有自己的审计团队，以实现持续改进您的组织的安全态势
+        - 优点
+            - 他们熟悉你组织内部的工作流程
+            - 效率高
+            - 能够很准确得找出最有问题的点
+            - 可以使审计工作更灵活，管理层可不断变换审计需求让审计团队调整审计方案
+        - 缺点
+            - 他们可能接触其他安全和利用信息系统的方法非常有限
+            - 存在利益冲突的可能性，妨碍客观性，
+    - 第三方审计
+        - 优点
+            - 审计过很多种不同的信息系统，经验丰富
+            - 他们不知道目标组织内部的动态和政治，将会保持客观中立
+        - 缺点
+            - 成本高
+            - 你仍然需要处理增加的资源来组织他们并监督他们的工作,即使签了保密协议。
+            - 缺乏对组织内部运作的了解通常会转化为审核员，花费较长的时间以获得导向并能够进行测试
+    - Statement on Auditing Standards（SAS）70
+        - specifically on risks related to internal control over financial reporting(ICOFR)财务报告内部控制
+        - not broader objectives such as system availability and security
+    - SOC Reporting Options
+        - SOC Report Types
+            - Type 2 reports
+                - Period of time reports covering design and operating effectiveness 一段时间内包含设计和运维有效性的报告
+                - Type 2 report of that system from the service provider
+                - relevant to users' internal control over financial reporting
+            - Type 1 reports
+                - point in time reports covering design
+        - SOC 2 / SOC 3 Principles
+        - Audit phase
+            - Audit Preparation Phase
+                - Define audit scope and overall project timeline
+                - Identify existing or required controls through discussions with management and review of available documentation
+                - Perform readiness review to identify gaps requiring management attention
+                - Communicate prioritized recommendations to address any identified gaps
+                - Verify that gaps have been closed before beginning the formal audit phase
+                - Hold working sessions to discuss alternatives and remediation plans
+            - Audit Phase
+                - Provide overall project plan
+                - Complete advance data collection before on-site, work to accelerate the audit process
+                - Conduct on-site meetings and testing
+                - Complete off-site analysis of collected information
+                - Conduct weekly reporting of project status and any identified issues
+                - Provide a draft report for management review and electronic and hard copies of the final report
+    - SOC 2 / SOC 3 Criteria
+    - SOC报告使用的观点 Point of View on the Use of SOC Reports
+- 审计管理控制
+    - 账号管理
+        - 添加账号
+            - 新员工应阅读并签署可接受使用政策(AUP)
+            - 通过审计员工账号，确认员工遵守AUP的情况，
+        - 修改账号
+        - 暂停账号
+    - 备份验证
+        - 数据类型
+            - 用户文件：存在多个版本和备份地点文件不一致的情况，以及有数据保留原则的情况
+            - 数据库：确保当需要时数据库备份能够恢复到生产环境中
+            - 邮件数据：考虑到服务器存储空间有限，中大型邮件不备份；邮件服务器应与电子取证手段相结合
+        - 验证方法
+            - 测试数据备份情况
+            - 分析组织可能面临的威胁各种场景
+            - 开发一个计划来测试每个场景中所有关键任务数据备份
+            - 利用自动化，最大限度地减少审计人员的工作量，确保测试定期发生
+            - 尽量减少数据备份测试计划对业务流程的影响，以便它可以定期执行
+            - 确保覆盖范围，使每一个系统进行测试，但不一定在同一个测试中
+            - 记录结果，这样你就知道什么是工作，什么是需要工作的
+            - 修正或完善你记录的任何问题
+    - 灾难恢复和业务连续性
+        - 测试和修改业务连续性计划
+        - 测试类型
+    - 安全培训和安全意识培训
+        - 安全培训与安全意识培训的区别
+        - 社会工程学
+        - Online Safety 在线安全
+        - 数据保护
+        - 文化
+    - 关机绩效和风险指标
+    - 报告
+        - 一个有效报告，必须写在一个特定的观众心目中
+        - 技术报告
+        - 行政摘要
+    - 管理评审
+{% endmarkmap %}
+
 # Domain 7 Security operations（安全运营）
 {% markmap 2400px %}
 - 基础概念
@@ -2402,3 +3104,5 @@ date: 2024-04-25 00:20:00
         - 计划必须控制版本
         - 从项目到方案
 {% endmarkmap %}
+
+# Domain 8. Software Development Security（软件开发安全）

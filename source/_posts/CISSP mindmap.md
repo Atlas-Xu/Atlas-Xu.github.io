@@ -1716,6 +1716,7 @@ date: 2024-04-25 00:20:00
 
 
 # Domain 6. Security Assessment and Testing（安全评估和测试）
+{% markmap 1800px %}
 - 基本概念
     - Security Assessment and Testing：安全评估和测试包含广泛的现行和基于时间点的测试方法用于确定脆弱性及其相关风险。
     - T&E的基本目标

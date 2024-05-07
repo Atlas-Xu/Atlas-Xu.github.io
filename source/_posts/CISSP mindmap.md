@@ -1,5 +1,5 @@
 ---
-title: CISSP Mindmap Note (In Updating)
+title: CISSP Mindmap Note
 tags:
   - 安全
 description: source：谷安天下。顺带测试一下hexo minmap插件。想5月考完CC就顺便先把CISSP学了（怕不是我太无聊了
@@ -3251,7 +3251,7 @@ date: 2024-04-25 00:20:00
 {% endmarkmap %}
 
 # Domain 8. Software Development Security（软件开发安全）
-{% markmap 2400px %}
+{% markmap 1000px %}
 - 系统开发安全
     - SDLC
         - 项目启动

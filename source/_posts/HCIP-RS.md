@@ -29,10 +29,69 @@ TCI：Tag Control Information，2字节。帧的控制信息，详细说明如�
 
 - *注*：从VLAN都可以和主VLAN互通，同一个组VLAN内可以互通，不同组VLAN间不能互通。同一个隔离VLAN内不能互通，不同隔离VLAN间不能互通。
 - *注*：华为MUX VLAN只在本地有效，无法实现跨设备隔离。
+### VxLAN
+VxLAN基于UDP封装，将以太网数据帧封装在IP报文中的UDP之上，所以被称为MAC in UDP的封装
+
+VNI：VXLAN网络标识，用于区分VXLAN段，由24比特组成，支持多达16M的租户。
+
+VxLAN用户是可以通过VxLAN接口访问互联网的。
+VxLAN通信过程是：
+1. 源VTEP源VM发送的ARP广播封装为组播豹纹发送到L3网络中
+2. 目的VTEP收到组播报文后，学习源VM与源VTEP映射关系，并将组播豹纹转发给本地VM
+3. 本地VM进行单播应答
+4. 目的VTEP封装Vxian隧道，并建立映射表封最后单播发给源VTEP
+5. 源VTEP收到应建立目标VM与目标VTEP映射关系，去掉隧道转发源VM
+6. 源VM与目标通过隧道进行单播报文通信
+### 代理ARP
+
+| ARP Proxy方式    | 解决的问题                             |
+| -------------- | --------------------------------- |
+| 路由式ARP Proxy   | 解决同一网段不同物理网络上计算机的互通问题。            |
+| VLAN内ARP Proxy | 解决相同VLAN内，且VLAN配置用户隔离后的网络上计算机互通问题 |
+| VLAN间ARP Proxy | 解决不同VLAN之间对应计算机的三层互通问题            |
+
 ## QinQ
+QinQ技术是一项扩展VLAN空间的技术，通过在802.1Q标签报文的基础上再增加一层802.1Q的Tag来达到扩展VLAN空间的功能。
 
+基本QinQ是基于接口方式实现的；QinQ技术可以使私网VLAN在公网上透传；灵活QinQ可以根据不同的内层Tag而加上不同的外层Tag,对于用户VLAN的划分更加细致；VLAN空间扩展到4094x4094 (0和4095为协议保留取值)。
+### 基于端口QinQ
+配置了此功能的端口，设备会为从此端口进入的报文打上一层VLAN ID为端口PVID的外层VLAN tag。
+基于端口的QinQ通过配置端口类型为dot1q-tunnel实现。
+当端口类型为dot1q-tunnel时，该端口加入的VLAN不支持二层组播功能。
+#### 配置
+```shell
+interface GigabitEthernet0/0/1
+ port link-type dot1q-tunnel  //将端口类型配置为dot1q-tunnel        
+ port default vlan 1000  //将端口加入到VLAN1000
+```
+### 灵活QinQ
+*灵活QINQ只能用在hybrid接口，trunk口无法实现。*
+#### 配置
+```shell
+interface GigabitEthernet0/0/1
 
+ qinq vlan-translation enable  //开启QINQ的VLAN转换功能
+
+ port hybrid untagged vlan 100 200  //定义接口出方向剥离VLAN100和200的标签
+
+ port vlan-stacking vlan 10 stack-vlan 100  //接口收到来自于VLAN10的数据帧后叠加一层VLAN100的外层标签。
+
+ port vlan-stacking vlan 20 stack-vlan 200 //接口收到来自于VLAN20的数据帧后叠加一层VLAN200的外层标签。
+
+ qinq protocol 9100  //只会修改针对内层VLAN TAG的以太类型改写，用于不同厂商的设备互通。华为默认为8100，可配置范围为0x0600～0xFFFF。
+```
+##### 配置命令说明
+- `port link-type hybrid`
+	- 灵活QinQ的接入端口类型可以配置为trunk或hybrid，根据具体情况而定。默认为hybrid，此时这条命令可不配。
+- `port hybrid untagged vlan 3`
+	- 配置接口以Untagged方式加入叠加后的VLAN。
+	- 叠加后的外层VLAN必须是设备上已存在的VLAN，叠加前的VLAN可以不创建。
+	- 配置后，接口在发送帧时会将帧中的Tag剥离。
+	- 如果在同一接口上多次使用此命令，则最终是多次配置的合集。
+- `port vlan-stacking vlan 200 to 300 stack-vlan 3`
+	- 配置灵活QinQ，在VLAN 200到300的用户VLAN上添加外层VLAN 3。
 # 路由部分
+## BGP
 
 
 # 网络安全技术

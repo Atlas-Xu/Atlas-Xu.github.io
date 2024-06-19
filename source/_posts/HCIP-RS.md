@@ -1,3 +1,12 @@
+---
+title: HCIP-RS学习笔记（In Updating）
+tags:
+  - 网络
+abbrlink: 74d1c79b
+description: >-
+  本笔记仅为考试后的总结整理，包含了视频学习和刷题中的问题理解，部分内容倾向于考试本身，如有疏漏和错误烦请指出。由于暂时懒得搭建gitbook，于是把所有内容都整到一篇内了....
+date: 2024-06-19 00:54:00
+---
 # 交换部分
 ## Vlan
 在现有的交换网络环境中，以太网的帧有两种格式：没有加上VLAN标记的标准以太网帧（untagged frame）；有VLAN标记的以太网帧（tagged frame）。

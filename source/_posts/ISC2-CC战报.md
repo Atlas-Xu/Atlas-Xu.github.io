@@ -2,6 +2,7 @@
 title: ISC2-CC战报
 tags:
   - 安全
+  - 随笔
 abbrlink: faaf6fb
 date: 2024-07-28 00:34:00
 description: 没啥价值的战报和一点个人看法

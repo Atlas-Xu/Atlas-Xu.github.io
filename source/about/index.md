@@ -3,12 +3,12 @@ title: about me
 layout: about
 ---
 # about me
-base 广东，正在找base广州的工作，安全及网络交付方向。
+base 广东
 
 ## Skills
 - HCIP - Advanced Routing & Switch Technology
 - Red Hat Certified Engineer
-- ISC2 - Certified in Cybersecurity (CC)
+- ISC2 - CISSP
 
 # about site
 本来是拿来当笔记用的，好多东西不用就忘了，所以有时候看的像是备忘录（因为当时确实就这样草草记了一下。

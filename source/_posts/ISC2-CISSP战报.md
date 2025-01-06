@@ -3,9 +3,9 @@ title: ISC2-CISSP战报
 tags:
   - 安全
   - 随笔
-
-date: 2024-12-16 20:34:00
 description: CISSP速通战报
+abbrlink: 315f1ff4
+date: 2024-12-16 20:34:00
 ---
 
 # 考试本身
